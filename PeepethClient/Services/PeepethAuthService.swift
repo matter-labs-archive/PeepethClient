@@ -222,19 +222,22 @@ class PeepethAuthService {
             print("Error")
             return
         }
-        print(newSecret)
+        
+        let secret = newSecret.secret.replacingOccurrences(of: "Log in to Peepeth.com by signing this secret code: ", with: "")
+        print(secret)
 
-        guard let messageData = newSecret.secret.data(using: .utf8) else {return}
+        guard let messageData = secret.data(using: .utf8) else {return}
         guard let messageHash = Web3.Utils.hashPersonalMessage(messageData) else {return}
         print("0x" + messageHash.toHexString())
-        guard case .success(let signature) = web3Instance.personal.signPersonalMessage(message: messageData, from: address, password: "123") else {return}
+        // TODO: - Another way to retrieve password
+        guard case .success(let signature) = web3Instance.personal.signPersonalMessage(message: messageData, from: address, password: "MYPASSWORD") else {return}
         let hexSignature = "0x" + signature.toHexString()
         print(hexSignature)
         components = URLComponents()
         components.scheme = "https"
         components.host = "peepeth.com"
         components.path = "/verify_signed_secret.js"
-        let reencodedSecret = newSecret.secret.replacingOccurrences(of: " ", with: "+")
+        let reencodedSecret = secret.replacingOccurrences(of: " ", with: "+")
 //            .replacingOccurrences(of: ":", with: "%3A")
         print(reencodedSecret)
         queryItems = [URLQueryItem]()

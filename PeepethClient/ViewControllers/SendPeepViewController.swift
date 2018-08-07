@@ -22,6 +22,7 @@ class SendPeepViewController: UIViewController {
     let service = Web3swiftService()
     let keysService = KeysService()
     let ipfsService = IPFSService()
+    let peepethService = PeepethAuthService()
     
     var shareHash: String? = nil
     var parentHash: String? = nil
@@ -78,10 +79,10 @@ class SendPeepViewController: UIViewController {
                 DispatchQueue.global().async {
                     self.prepareTransaction(privateKey: privateKey, password: passwordText, content: content!, shareHash: shareHash, parentHash: parentHash)
                 }
-                //
-                //                DispatchQueue.global().async {
-                //                    self.postPeepToServer(password: <#T##String#>)
-                //                }
+
+                DispatchQueue.global().async {
+                    self.postPeepToServer()
+                }
                 
                 
             } else {
@@ -98,27 +99,11 @@ class SendPeepViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    //    func postPeepToServer(password: String) {
-    //
-    //        //to get user name
-    //
-    //
-    //
-    //        //to make it clear
-    //        if !textViewEdited {
-    //            self.textView.text = ""
-    //        }
-    //
-    //        let content = textView.text
-    //        if shareHash == nil {
-    //            shareHash = ""
-    //        }
-    //
-    //        if parentHash == nil {
-    //            parentHash = ""
-    //        }
-    //
-    //    }
+    func postPeepToServer() {
+
+        
+
+    }
     
     func showErrorAlert(error: String?) {
         animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
