@@ -2,6 +2,9 @@
 //  ServerPeepModel.swift
 //  PeepethClient
 //
+//  Created by Антон Григорьев on 06.07.2018.
+//  Copyright © 2018 BaldyAsh. All rights reserved.
+//
 
 import Foundation
 
@@ -48,6 +51,27 @@ struct ServerPeep {
         self.parent = parent
     }
 }
+
+///*
+// * Model of Peeps tweets we post to server
+// */
+//struct PostServerPeep {
+//
+//    var info: [String: Any?] = ["ipfs": nil,
+//                                "author": nil,
+//                                "content" : nil,
+//                                "parentID": nil,
+//                                "shareID":nil,
+//                                "parentID":nil,
+//                                "twitter_share":nil,
+//                                "picIpfs":nil,
+//                                "origContents":nil,
+//                                "share_now":nil]
+//
+//    init(info: [String: Any?], shared: Bool, parent: Bool) {
+//        self.info = info
+//    }
+//}
 
 /*
  Extension to make class equatable by "ipfs" field in ipfs

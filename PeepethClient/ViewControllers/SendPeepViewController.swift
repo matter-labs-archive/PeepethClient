@@ -2,13 +2,16 @@
 //  SendPeepViewController.swift
 //  PeepethClient
 //
+//  Created by Антон Григорьев on 07.07.2018.
+//  Copyright © 2018 BaldyAsh. All rights reserved.
+//
 
 import UIKit
 import BigInt
 import web3swift
 
 class SendPeepViewController: UIViewController {
-
+    
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var postTheMessageLabel: UILabel!
@@ -65,9 +68,21 @@ class SendPeepViewController: UIViewController {
         //get private key
         let enterPasswordAction = UIAlertAction(title: "Enter", style: .default) { (alertAction) in
             self.animation.waitAnimation(isEnabled: true, notificationText: "Preparing transaction", selfView: self.view)
-            let passwordTextField = alert.textFields![0] as UITextField
-            if let privateKey = self.keysService.getWalletPrivateKey(password: passwordTextField.text!) {
-                self.prepareTransaction(privateKey: privateKey, password: passwordTextField.text!)
+            let passwordText = alert.textFields![0].text!
+            if let privateKey = self.keysService.getWalletPrivateKey(password: passwordText) {
+                
+                let content = self.textViewEdited ? self.textView.text : ""
+                let shareHash = self.shareHash != nil ? self.shareHash! : ""
+                let parentHash = self.parentHash != nil ? self.parentHash! : ""
+                
+                DispatchQueue.global().async {
+                    self.prepareTransaction(privateKey: privateKey, password: passwordText, content: content!, shareHash: shareHash, parentHash: parentHash)
+                }
+                //
+                //                DispatchQueue.global().async {
+                //                    self.postPeepToServer(password: <#T##String#>)
+                //                }
+                
                 
             } else {
                 self.showErrorAlert(error: "Wrong password")
@@ -83,6 +98,28 @@ class SendPeepViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+    //    func postPeepToServer(password: String) {
+    //
+    //        //to get user name
+    //
+    //
+    //
+    //        //to make it clear
+    //        if !textViewEdited {
+    //            self.textView.text = ""
+    //        }
+    //
+    //        let content = textView.text
+    //        if shareHash == nil {
+    //            shareHash = ""
+    //        }
+    //
+    //        if parentHash == nil {
+    //            parentHash = ""
+    //        }
+    //
+    //    }
+    
     func showErrorAlert(error: String?) {
         animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
         let alert = UIAlertController(title: "Error", message: error!, preferredStyle: .alert)
@@ -91,34 +128,19 @@ class SendPeepViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    func prepareTransaction(privateKey: String, password: String) {
-        //to make it clear
-        if !textViewEdited {
-            self.textView.text = ""
-        }
-        
-        let content = textView.text
-        
-        if shareHash == nil {
-            shareHash = ""
-        }
-        
-        if parentHash == nil {
-            parentHash = ""
-        }
-        
+    func prepareTransaction(privateKey: String, password: String, content: String, shareHash: String, parentHash: String) {
         
         //get your adress
         service.getUntrustedAddress(completion: { (address) in
             if address != nil {
                 // send to ipfs, get hash, intermediate transaction - show gas price
                 let peep = Peep(type: "peep",
-                                content: content!,
+                                content: content,
                                 pic: "",
                                 untrustedAddress: address!,
                                 untrustedTimestamp: Int(Date().timeIntervalSince1970),
-                                shareID: self.shareHash!,
-                                parentID: "")
+                                shareID: shareHash,
+                                parentID: parentHash)
                 
                 self.ipfsService.postToIPFS(data: peep, completion: { (result) in
                     

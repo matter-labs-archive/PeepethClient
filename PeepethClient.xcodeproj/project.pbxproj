@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		00E5FE8720EF54B60030E0D6 /* IPFSService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8620EF54B60030E0D6 /* IPFSService.swift */; };
 		00E5FE8920EF54CF0030E0D6 /* Web3swiftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8820EF54CF0030E0D6 /* Web3swiftService.swift */; };
-		00E5FE8C20EF58CF0030E0D6 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8B20EF58CF0030E0D6 /* Constants.swift */; };
+		00E5FE8C20EF58CF0030E0D6 /* ConstantsAndUrls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8B20EF58CF0030E0D6 /* ConstantsAndUrls.swift */; };
 		00E5FE8E20EF597E0030E0D6 /* KeysService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE8D20EF597E0030E0D6 /* KeysService.swift */; };
 		00E5FE9320EF71810030E0D6 /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE9220EF71810030E0D6 /* CoreDataService.swift */; };
 		00E5FE9620EF7B5B0030E0D6 /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 00E5FE9420EF7B5B0030E0D6 /* CoreDataModel.xcdatamodeld */; };
@@ -34,7 +34,7 @@
 /* Begin PBXFileReference section */
 		00E5FE8620EF54B60030E0D6 /* IPFSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPFSService.swift; sourceTree = "<group>"; };
 		00E5FE8820EF54CF0030E0D6 /* Web3swiftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Web3swiftService.swift; sourceTree = "<group>"; };
-		00E5FE8B20EF58CF0030E0D6 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		00E5FE8B20EF58CF0030E0D6 /* ConstantsAndUrls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsAndUrls.swift; sourceTree = "<group>"; };
 		00E5FE8D20EF597E0030E0D6 /* KeysService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeysService.swift; sourceTree = "<group>"; };
 		00E5FE9220EF71810030E0D6 /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		00E5FE9520EF7B5B0030E0D6 /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -88,7 +88,7 @@
 		00E5FE8A20EF58C00030E0D6 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				00E5FE8B20EF58CF0030E0D6 /* Constants.swift */,
+				00E5FE8B20EF58CF0030E0D6 /* ConstantsAndUrls.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -275,7 +275,7 @@
 				00E5FE9320EF71810030E0D6 /* CoreDataService.swift in Sources */,
 				E23FF91B20EF88FD007BB50D /* PeepsListService.swift in Sources */,
 				81A640D8210A5C4A00BF16B1 /* PeepethAuthService.swift in Sources */,
-				00E5FE8C20EF58CF0030E0D6 /* Constants.swift in Sources */,
+				00E5FE8C20EF58CF0030E0D6 /* ConstantsAndUrls.swift in Sources */,
 				00E5FE8920EF54CF0030E0D6 /* Web3swiftService.swift in Sources */,
 				E23FF8F720EF519B007BB50D /* EnterViewController.swift in Sources */,
 				E23FF8F520EF519B007BB50D /* AppDelegate.swift in Sources */,

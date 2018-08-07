@@ -12,12 +12,12 @@ PODS:
     - PromiseKit/CorePromise
   - PromiseKit/UIKit (6.3.4):
     - PromiseKit/CorePromise
-  - QRCodeReader.swift (8.1.1)
+  - QRCodeReader.swift (8.2.0)
   - Result (3.0.0)
   - secp256k1_ios (0.1.3)
   - SipHash (1.2.2)
   - SwiftSoup (1.7.2)
-  - web3swift (1.0.1):
+  - web3swift (1.1.1):
     - BigInt (~> 3.1.0)
     - CryptoSwift (~> 0.10.0)
     - libsodium (~> 1.0.12)
@@ -26,9 +26,9 @@ PODS:
     - secp256k1_ios (~> 0.1.3)
 
 DEPENDENCIES:
-  - QRCodeReader.swift (~> 8.1.1)
+  - QRCodeReader.swift (~> 8.2.0)
   - SwiftSoup
-  - web3swift (~> 1.0.0)
+  - web3swift (~> 1.1.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -48,13 +48,13 @@ SPEC CHECKSUMS:
   CryptoSwift: 6c778d69282bed3b4e975ff97a79d074f20bb011
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
   PromiseKit: e1425568123ec844a944c93f2bcb29d511d39cf5
-  QRCodeReader.swift: b164a681887de276d405ff02bce854d82cd6360b
+  QRCodeReader.swift: 003eb32f18a5a675b936ec82ba0ff368cddbff45
   Result: 1b3e431f37cbcd3ad89c6aa9ab0ae55515fae3b6
   secp256k1_ios: ac9ef04e761f43c58012b28548afa91493761f17
   SipHash: fad90a4683e420c52ef28063063dbbce248ea6d4
   SwiftSoup: e5f61d37e3d802a4b5db81b4945de3da9bfdf115
-  web3swift: a1db39ac09f6538adb248e2011911348cc88c2c3
+  web3swift: 4b4e4a0dd16e7081b7190bf8596c5638f313a498
 
-PODFILE CHECKSUM: cfc2bf364a0b29cb6651b4e8a6ec6071329caf0e
+PODFILE CHECKSUM: b3bc48013d679f274bef6538a68407ed2e18924f
 
 COCOAPODS: 1.5.3

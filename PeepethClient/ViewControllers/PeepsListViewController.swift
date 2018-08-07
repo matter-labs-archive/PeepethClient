@@ -2,19 +2,19 @@
 //  PeepsListViewController.swift
 //  PeepethClient
 //
+//  Created by Антон Григорьев on 06.07.2018.
+//  Copyright © 2018 BaldyAsh. All rights reserved.
+//
 
 import UIKit
 import web3swift
 
 class PeepsListViewController: UIViewController {
     
-    enum controllerTypes: String {
-        case user = "https://peepeth.com/account_peeps?address="
-        case global = "https://peepeth.com/get_peeps"
-    }
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var peepOrRegButton: UIBarButtonItem!
+    
+    var searchController: UISearchController!
     
     let web3service: Web3swiftService = Web3swiftService()
     
@@ -27,6 +27,9 @@ class PeepsListViewController: UIViewController {
     var shareHash: String? = nil
     
     var controllerType: controllerTypes = .global
+    
+    var searchingString: String? = nil
+    var searchingPage = 1
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
@@ -106,6 +109,14 @@ class PeepsListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        tableView.tableHeaderView = searchController.searchBar
+        searchController.searchBar.delegate = self
+        searchController.searchBar.barTintColor = UIColor.white
+        searchController.searchBar.tintColor = UIColor.darkText
+        definesPresentationContext = true
     }
     
     override func didReceiveMemoryWarning() {
@@ -118,18 +129,8 @@ class PeepsListViewController: UIViewController {
     }
     
     func getPeepsList(older: Bool) {
-        var url: String? = nil
-        switch controllerType {
-        case .user:
-            guard let walletAddress = KeysService().selectedWallet()?.address else { return }
-            let basicUrl: String = controllerType.rawValue + walletAddress.lowercased()
-            let olderUrl: String = older ? "&oldest=\(peeps?.last!.info["ipfs"]! as! String)" : ""
-            url = basicUrl + olderUrl
-        case .global:
-            let basicUrl: String = controllerType.rawValue + "?you=0x832a630b949575b87c0e3c00f624f773d9b160f4"
-            let olderUrl: String = older ? "&oldest=\(peeps?.last!.info["ipfs"]! as! String)" : ""
-            url = basicUrl + olderUrl
-        }
+        
+        let url = searchingString == nil ? urlForGetPeeps(type: controllerType, walletAddress: KeysService().selectedWallet()?.address, lastPeep: older ? peeps?.last : nil) : urlForSearchPeeps(searchingString: searchingString!, page: searchingPage)
         
         guard url != nil else {
             return
@@ -139,7 +140,7 @@ class PeepsListViewController: UIViewController {
             animation.waitAnimation(isEnabled: true, notificationText: "Getting peeps", selfView: tableView)
         }
         
-        PeepsService().getPeeps(urlString: url!){ (receivedPeeps, error) in
+        PeepsService().getPeeps(url: url!){ (receivedPeeps, error) in
             if (error != nil) {
                 self.getPeepsList(older: older)
             } else {
@@ -183,32 +184,20 @@ class PeepsListViewController: UIViewController {
      */
     func getUsersAvatars(for peeps: [ServerPeep]?) {
         for peep in peeps! {
-            if let fullUrlString = parseImageServerString(urlString: peep.info["avatarUrl"] as? String) {
+            if let url = parseImageServerString(peep: peep) {
                 
-                if let avatarUrl = URL(string: fullUrlString) {
-                    PeepsService().getDataFromUrl(url: avatarUrl, completion: { (imageData, response, error) in
-                        DispatchQueue.main.async {
-                            if imageData != nil {
-                                let row = (self.peeps)!.index(of: peep)
-                                self.peeps![row!].info["avatar_imageData"] = imageData
-                                self.tableView.reloadRows(at: [[0, row!]], with: .none)
-                            }
+                PeepsService().getDataFromUrl(url: url, completion: { (imageData, response, error) in
+                    DispatchQueue.main.async {
+                        if imageData != nil {
+                            let row = (self.peeps)!.index(of: peep)
+                            self.peeps![row!].info["avatar_imageData"] = imageData
+                            self.tableView.reloadRows(at: [[0, row!]], with: .none)
                         }
-                    })
-                }
+                    }
+                })
+                
             }
         }
-    }
-    
-    func parseImageServerString(urlString: String?) -> String? {
-        var fullUrlString: String? = nil
-        if let parsedString = (urlString)?.components(separatedBy: ":") {
-            let serverString: String = parsedString.count > 0 ? parsedString[0] : ""
-            let nameString: String = parsedString.count > 1 ? parsedString[1] : ""
-            let extString: String = parsedString.count > 2 ? parsedString[2] : ""
-            fullUrlString = "https://\(serverString).s3-us-west-1.amazonaws.com/images/avatars/\(nameString)/small.\(extString)"
-        }
-        return fullUrlString
     }
     
     @IBAction func exitAccount(_ sender: UIBarButtonItem) {
@@ -290,6 +279,9 @@ extension PeepsListViewController: UITableViewDelegate, UITableViewDataSource {
         
         DispatchQueue.global(qos: .utility).sync {
             if currentOffset/maximumOffset >= 2/3 {
+                if searchingString != nil {
+                    self.searchingPage += 1
+                }
                 self.getPeepsList(older: true)
                 
             }
@@ -312,6 +304,41 @@ extension PeepsListViewController: UITableViewDelegate, UITableViewDataSource {
         
         self.show(shareController, sender: self)
     }
+}
+
+extension PeepsListViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        
+    }
     
     
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        if searchController.searchBar.text! != "" {
+            self.tableView.setContentOffset(.zero, animated: true)
+            self.searchingString = self.searchController.searchBar.text!
+            self.searchingPage = 1
+            self.getPeepsList(older: false)
+        } else {
+            self.tableView.setContentOffset(.zero, animated: true)
+            self.searchingString = nil
+            self.searchingPage = 1
+            self.getPeepsList(older: false)
+        }
+    }
+}
+
+extension PeepsListViewController: UISearchBarDelegate {
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        self.tableView.setContentOffset(.zero, animated: true)
+        self.searchingString = nil
+        searchingPage = 1
+        self.getPeepsList(older: false)
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
+    }
 }

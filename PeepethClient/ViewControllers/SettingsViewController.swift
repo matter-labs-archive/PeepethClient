@@ -2,6 +2,9 @@
 //  SettingsViewController.swift
 //  PeepethClient
 //
+//  Created by Антон Григорьев on 08.07.2018.
+//  Copyright © 2018 BaldyAsh. All rights reserved.
+//
 
 import UIKit
 import BigInt
@@ -136,7 +139,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         alert.addTextField { (textField) in
             //textField.isSecureTextEntry = true
-            textField.placeholder = "Enter your nickname: MIN 3 Characters"
+            textField.placeholder = "Enter your user name: MIN 3 Characters"
         }
         alert.addTextField { (textField) in
             //textField.isSecureTextEntry = true
@@ -277,7 +280,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                 self.showErrorAlert(error: error.localizedDescription)
             }
         })
-
+        
     }
     
     func showAlertSuccessTransaction() {
@@ -304,5 +307,5 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     
-
+    
 }

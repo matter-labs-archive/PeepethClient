@@ -6,7 +6,7 @@ target 'PeepethClient' do
   #use_frameworks!
    use_modular_headers!
   # Pods for PeepethClient
-   pod 'web3swift', '~> 1.0.0'
-   pod 'QRCodeReader.swift', '~> 8.1.1'
+   pod 'web3swift', '~> 1.1.1'
+   pod 'QRCodeReader.swift', '~> 8.2.0'
    pod 'SwiftSoup'
 end
