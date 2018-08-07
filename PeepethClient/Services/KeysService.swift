@@ -87,8 +87,8 @@ class KeysService: IKeysService {
     
     func getWalletPrivateKey(password: String) -> String? {
         do {
-            let data = try keystoreManager().UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress((selectedWallet()?.address)!)!)
-            return data.toHexString()
+            let data = try keystoreManager()?.UNSAFE_getPrivateKeyData(password: password, account: EthereumAddress((selectedWallet()?.address)!)!)
+            return data?.toHexString()
         } catch {
             print(error)
             return nil
@@ -97,14 +97,14 @@ class KeysService: IKeysService {
 }
 
 protocol IKeysService {
-    func keystoreManager() -> KeystoreManager
+    func keystoreManager() -> KeystoreManager?
     func selectedWallet() -> KeyWalletModel?
 }
 
 extension IKeysService {
-    func keystoreManager() -> KeystoreManager {
+    func keystoreManager() -> KeystoreManager? {
         guard let selectedWallet = selectedWallet(), let data = selectedWallet.data else {
-            return KeystoreManager.defaultManager!
+            return KeystoreManager.defaultManager
         }
         return KeystoreManager([EthereumKeystoreV3(data)!])
     }
