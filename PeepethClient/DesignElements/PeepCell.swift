@@ -28,6 +28,7 @@ class PeepCell: UITableViewCell {
         userNameLabel.text = peep.info["realName"] as? String
         nickNameLabel.text = (peep.info["name"] != nil) ? "@"+(peep.info["name"] as? String)! : nil
         messageLabel.text = peep.info["content"] as? String
+        print(messageLabel.text!)
         if let imageData = peep.info["avatar_imageData"] {
             let image = UIImage(data: imageData as! Data)
             self.userAvatar.image = image

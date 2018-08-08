@@ -80,7 +80,7 @@ class PeepsListViewController: UIViewController {
     
     //Init full functionality
     func initWithRegisteredAcc() {
-        self.tabBarController?.selectedIndex = 1
+        self.tabBarController?.selectedIndex = 0
         switch self.restorationIdentifier {
         case "UserPeepsListViewController":
             controllerType = .user

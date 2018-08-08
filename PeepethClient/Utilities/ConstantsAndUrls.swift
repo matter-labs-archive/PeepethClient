@@ -17,15 +17,24 @@ let peepEthABI = """
 """
 
 enum controllerTypes: String {
-    case user = "https://peepeth.com/account_peeps?address="
+    case user = "https://peepeth.com/account_peeps?&oldest="
     case global = "https://peepeth.com/get_peeps?you="
 }
 
 func urlForGetPeeps(type: controllerTypes, walletAddress: String?, lastPeep: ServerPeep? = nil) -> URL? {
+    
     let url: String?
-    let basicUrl: String = type.rawValue + walletAddress!.lowercased()
-    let olderUrl: String = (lastPeep != nil) ? "&oldest=" + (lastPeep?.info["ipfs"] as! String) : ""
-    url = basicUrl + olderUrl
+    
+    if type == .user {
+        let basicUrl: String = type.rawValue
+        let olderUrl: String = (lastPeep != nil) ? (lastPeep?.info["ipfs"] as! String) : "0"
+        url = basicUrl + olderUrl + "&address=" + walletAddress!.lowercased()
+    } else {
+        let basicUrl: String = type.rawValue + walletAddress!.lowercased()
+        let olderUrl: String = (lastPeep != nil) ? "&oldest=" + (lastPeep?.info["ipfs"] as! String) : "&oldest=0"
+        url = basicUrl + olderUrl
+    }
+    
     return URL(string: url!)
 }
 

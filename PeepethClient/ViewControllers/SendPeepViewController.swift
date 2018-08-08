@@ -22,7 +22,6 @@ class SendPeepViewController: UIViewController {
     let service = Web3swiftService()
     let keysService = KeysService()
     let ipfsService = IPFSService()
-    let peepethService = PeepethAuthService()
     
     var shareHash: String? = nil
     var parentHash: String? = nil
@@ -79,10 +78,6 @@ class SendPeepViewController: UIViewController {
                 DispatchQueue.global().async {
                     self.prepareTransaction(privateKey: privateKey, password: passwordText, content: content!, shareHash: shareHash, parentHash: parentHash)
                 }
-
-                DispatchQueue.global().async {
-                    self.postPeepToServer()
-                }
                 
                 
             } else {
@@ -99,11 +94,11 @@ class SendPeepViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    func postPeepToServer() {
-
-        
-
-    }
+//    func postPeepToServer() {
+//
+//
+//
+//    }
     
     func showErrorAlert(error: String?) {
         animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
@@ -127,34 +122,59 @@ class SendPeepViewController: UIViewController {
                                 shareID: shareHash,
                                 parentID: parentHash)
                 
-                self.ipfsService.postToIPFS(data: peep, completion: { (result) in
-                    
-                    switch result {
-                    case .Success(let peepHash):
-                        if self.shareHash != "" {
-                            self.service.prepareSharePeepTransaction(peepDataHash: peepHash, completion: { (result) in
-                                switch result {
-                                case .Success(let transaction):
-                                    self.confirmTransactionAlert(password: password, transaction: transaction)
-                                case .Error(let error):
-                                    self.showErrorAlert(error: error.localizedDescription)
-                                }
-                            })
-                        } else {
-                            self.service.preparePostPeepTransaction(peepDataHash: peepHash, completion: { (result) in
-                                switch result {
-                                case .Success(let transaction):
-                                    self.confirmTransactionAlert(password: password, transaction: transaction)
-                                case .Error(let error):
-                                    self.showErrorAlert(error: error.localizedDescription)
-                                }
-                            })
+                let createPeep = CreateServerPeep(ipfs: "xxx",
+                                                  author: address!,
+                                                  content: content,
+                                                  parentID: parentHash,
+                                                  shareID: shareHash,
+                                                  twitterShare: false,
+                                                  picIpfs: "",
+                                                  origContents: peep,
+                                                  shareNow: true)
+                
+                DispatchQueue.global().async {
+                    PeepethAuthService.sharedInstance.createPeep(data: createPeep, completion: { (result) in
+                        switch result {
+                        case .Success(let resp) :
+                            print(resp)
+                            DispatchQueue.main.async {
+                                self.animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
+                            }
+                            
+                        case .Error(let error) :
+                            print(error.localizedDescription)
                         }
-                    case .Error(let error):
-                        self.showErrorAlert(error: error.localizedDescription)
-                    }
-                    
-                })
+                        
+                    })
+                }
+//                self.ipfsService.postToIPFS(data: peep, completion: { (result) in
+//
+//                    switch result {
+//                    case .Success(let peepHash):
+//                        if self.shareHash != "" {
+//                            self.service.prepareSharePeepTransaction(peepDataHash: peepHash, completion: { (result) in
+//                                switch result {
+//                                case .Success(let transaction):
+//                                    self.confirmTransactionAlert(password: password, transaction: transaction)
+//                                case .Error(let error):
+//                                    self.showErrorAlert(error: error.localizedDescription)
+//                                }
+//                            })
+//                        } else {
+//                            self.service.preparePostPeepTransaction(peepDataHash: peepHash, completion: { (result) in
+//                                switch result {
+//                                case .Success(let transaction):
+//                                    self.confirmTransactionAlert(password: password, transaction: transaction)
+//                                case .Error(let error):
+//                                    self.showErrorAlert(error: error.localizedDescription)
+//                                }
+//                            })
+//                        }
+//                    case .Error(let error):
+//                        self.showErrorAlert(error: error.localizedDescription)
+//                    }
+//
+//                })
             } else {
                 return
             }
