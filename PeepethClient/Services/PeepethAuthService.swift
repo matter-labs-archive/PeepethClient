@@ -28,7 +28,17 @@ struct VisitTokenRequest: Encodable {
 }
 
 class PeepethAuthService {
+    
+    static let sharedInstance = PeepethAuthService()
+    
     var session : URLSession
+    var cookie: [HTTPCookie]?
+    var host: String?
+    var origin: String?
+    var referer: String?
+    var userAgent: String?
+    var xCsrfToken: String?
+    var xRequestedWith: String?
     
     init() {
 
@@ -57,7 +67,6 @@ class PeepethAuthService {
                     return
                 }
                 let responseStatusCode = (resp! as! HTTPURLResponse).statusCode
-                print(responseStatusCode)
                 responseData = data
                 response = resp
                 semaphore.signal()
@@ -115,7 +124,6 @@ class PeepethAuthService {
                     return
                 }
                 let responseStatusCode = (resp! as! HTTPURLResponse).statusCode
-                print(responseStatusCode)
                 responseData = data
                 response = resp
                 semaphore.signal()
@@ -151,7 +159,6 @@ class PeepethAuthService {
                     return
                 }
                 let responseStatusCode = (resp! as! HTTPURLResponse).statusCode
-                print(responseStatusCode)
                 responseData = data
                 response = resp
                 semaphore.signal()
@@ -160,7 +167,7 @@ class PeepethAuthService {
         }
         semaphore.wait()
         let accountData = try? JSONSerialization.jsonObject(with: responseData!, options: []) as? [String: Any]
-        print(accountData)
+        print("account data = ", accountData)
         
         // set is user
         
@@ -183,7 +190,6 @@ class PeepethAuthService {
                     return
                 }
                 let responseStatusCode = (resp! as! HTTPURLResponse).statusCode
-                print(responseStatusCode)
                 responseData = data
                 response = resp
                 semaphore.signal()
@@ -222,21 +228,24 @@ class PeepethAuthService {
             print("Error")
             return
         }
-        print(newSecret)
+        
+        //let secret = newSecret.secret.replacingOccurrences(of: "Log in to Peepeth.com by signing this secret code: ", with: "")
+        //print("secret =", secret)
 
         guard let messageData = newSecret.secret.data(using: .utf8) else {return}
         guard let messageHash = Web3.Utils.hashPersonalMessage(messageData) else {return}
-        print("0x" + messageHash.toHexString())
-        guard case .success(let signature) = web3Instance.personal.signPersonalMessage(message: messageData, from: address, password: "123") else {return}
+        print("messageHash: 0x" + messageHash.toHexString())
+        // TODO: - Another way to retrieve password
+        guard case .success(let signature) = web3Instance.personal.signPersonalMessage(message: messageData, from: address, password: "MYPASSWORD") else {return}
         let hexSignature = "0x" + signature.toHexString()
-        print(hexSignature)
+        print("hex signature =", hexSignature)
         components = URLComponents()
         components.scheme = "https"
         components.host = "peepeth.com"
         components.path = "/verify_signed_secret.js"
         let reencodedSecret = newSecret.secret.replacingOccurrences(of: " ", with: "+")
 //            .replacingOccurrences(of: ":", with: "%3A")
-        print(reencodedSecret)
+        print("recorded secret =", reencodedSecret)
         queryItems = [URLQueryItem]()
         queryItems.append(URLQueryItem.init(name: "signed_token", value: hexSignature))
         queryItems.append(URLQueryItem.init(name: "original_token", value: reencodedSecret))
@@ -278,7 +287,92 @@ class PeepethAuthService {
             print("")
         }
         let cookies = self.session.configuration.httpCookieStorage?.cookies
-        print(cookies)
+        print("cookies =", cookies)
         
+        //filling data
+        self.cookie = cookies
+        self.userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+        self.xCsrfToken = csrf
+        self.xRequestedWith = "XMLHttpRequest"
+        self.referer = "https://peepeth.com/_"
+        self.origin = "https://peepeth.com"
+        self.host = "peepeth.com"
+        
+    }
+    
+    func createPeep(data: CreateServerPeep, completion: @escaping(Result<String>) -> Void) {
+        var task: URLSessionDataTask? = nil
+        let url = URL(string: "https://peepeth.com/create_peep")!
+        var request = URLRequest(url: url)
+        request.httpShouldHandleCookies = true
+        request.setValue(self.referer ?? "", forHTTPHeaderField: "Referer")
+        request.setValue(self.userAgent ?? "", forHTTPHeaderField: "User-agent")
+        request.setValue(self.host ?? "", forHTTPHeaderField: "Host")
+        request.setValue(self.origin ?? "", forHTTPHeaderField: "Origin")
+        request.setValue(self.xRequestedWith ?? "", forHTTPHeaderField: "X-Requested-With")
+        request.setValue(self.xCsrfToken ?? "", forHTTPHeaderField: "X-CSRF-Token")
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded; charset=UTF-8", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "peep%5Bipfs%5D=xxx&peep%5Bauthor%5D=\(data.author.lowercased())&peep%5Bcontent%5D=\(data.content)&peep%5BparentID%5D=\(data.parentID)&peep%5BshareID%5D=\(data.shareID)&peep%5Btwitter_share%5D=\(data.twitterShare)&peep%5BpicIpfs%5D=\(data.picIpfs)&peep%5BorigContents%5D=%7B%22type%22%3A%22\(data.origContents.type)%22%2C%22content%22%3A%22\(data.origContents.content)%22%2C%22pic%22%3A%22\(data.origContents.pic)%22%2C%22untrustedAddress%22%3A%22\(data.origContents.untrustedAddress.lowercased())%22%2C%22untrustedTimestamp%22%3A\(data.origContents.untrustedTimestamp)%2C%22shareID%22%3A%22\(data.origContents.shareID)%22%2C%22parentID%22%3A%22\(data.origContents.parentID)%22%7D&share_now=true".data(using:String.Encoding.utf8, allowLossyConversion: false)
+        
+        
+        DispatchQueue.global().async {
+            task = self.session.dataTask(with: request) { (data, resp, error) in
+                if error != nil {
+                    completion(Result.Error(error!))
+                    return
+                }
+                if let resp = resp, let data = data {
+                    
+                    do {
+                        let responseStatusCode = (resp as! HTTPURLResponse).statusCode
+                        let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                        if let hash = jsonData!["hash"] as? String {
+                            completion(Result.Success(hash))
+                        } else {
+                            completion(Result.Success(String(responseStatusCode)))
+                        }
+                        
+                    } catch {
+                        completion(Result.Error(error))
+                    }
+                }
+            }
+            task!.resume()
+        }
+    }
+}
+
+
+//peep[ipfs]: xxx
+//peep[author]: 0x832a630b949575b87c0e3c00f624f773d9b160f4
+//peep[content]: empty_peep
+//peep[parentID]:
+//peep[shareID]:
+//peep[twitter_share]: false
+//peep[picIpfs]:
+//peep[origContents]: {"type":"peep","content":"empty_peep","pic":"","untrustedAddress":"0x832a630b949575b87c0e3c00f624f773d9b160f4","untrustedTimestamp":1533728914,"shareID":"","parentID":""}
+//share_now: true
+struct CreateServerPeep: Encodable {
+    let ipfs: String
+    let author: String
+    let content: String
+    let parentID: String
+    let shareID: String
+    let twitterShare: Bool
+    let picIpfs: String
+    let origContents: Peep
+    let shareNow: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case ipfs = "peep[ipfs]"
+        case author = "peep[author]"
+        case content = "peep[content]"
+        case parentID = "peep[parentID]"
+        case shareID = "peep[shareID]"
+        case twitterShare = "peep[twitter_share]"
+        case picIpfs = "peep[picIpfs]"
+        case origContents = "peep[origContents]"
+        case shareNow = "share_now"
     }
 }

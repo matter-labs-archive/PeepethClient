@@ -15,6 +15,7 @@ class SendPeepViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var postTheMessageLabel: UILabel!
+    @IBOutlet weak var lockNowButton: UIButton!
     
     var textViewEdited = false
     
@@ -25,6 +26,8 @@ class SendPeepViewController: UIViewController {
     
     var shareHash: String? = nil
     var parentHash: String? = nil
+    
+    var sendingToBlockchain: Bool = false
     
     let animation = AnimationController()
     
@@ -40,7 +43,10 @@ class SendPeepViewController: UIViewController {
         self.hideKeyboardWhenTappedAround()
         service.getETHbalance() { (result, error) in
             DispatchQueue.main.async {
-                let ethUnits = Web3Utils.formatToEthereumUnits(result!, toUnits: .eth, decimals: 6, decimalSeparator: ".")
+                let ethUnits = Web3Utils.formatToEthereumUnits(result!,
+                                                               toUnits: .eth,
+                                                               decimals: 6,
+                                                               decimalSeparator: ".")
                 self.balanceLabel.text = "ETH Balance: " + ethUnits!
             }
             
@@ -50,10 +56,21 @@ class SendPeepViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        lockNowButton.setImage(UIImage(named: "checkbox_unchecked"), for: .normal)
+        sendingToBlockchain = false
+        lockNowButton.setTitleColor(UIColor.black, for: .normal)
         textView.textColor = UIColor.lightGray
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.lightGray.cgColor
         
+    }
+    
+    @IBAction func lockNowAction(_ sender: UIButton) {
+        sendingToBlockchain = !sendingToBlockchain
+        lockNowButton.setTitleColor(sendingToBlockchain ? UIColor.blue : UIColor.black, for: .normal)
+        lockNowButton.setImage(sendingToBlockchain ?
+            UIImage(named: "checkbox_checked") :
+            UIImage(named: "checkbox_unchecked"), for: .normal)
     }
     
     @IBAction func postPeep(_ sender: UIButton) {
@@ -67,7 +84,9 @@ class SendPeepViewController: UIViewController {
         
         //get private key
         let enterPasswordAction = UIAlertAction(title: "Enter", style: .default) { (alertAction) in
-            self.animation.waitAnimation(isEnabled: true, notificationText: "Preparing transaction", selfView: self.view)
+            self.animation.waitAnimation(isEnabled: true,
+                                         notificationText: "Preparing transaction",
+                                         selfView: self.view)
             let passwordText = alert.textFields![0].text!
             if let privateKey = self.keysService.getWalletPrivateKey(password: passwordText) {
                 
@@ -76,12 +95,12 @@ class SendPeepViewController: UIViewController {
                 let parentHash = self.parentHash != nil ? self.parentHash! : ""
                 
                 DispatchQueue.global().async {
-                    self.prepareTransaction(privateKey: privateKey, password: passwordText, content: content!, shareHash: shareHash, parentHash: parentHash)
+                    self.prepareTransaction(privateKey: privateKey,
+                                            password: passwordText,
+                                            content: content!,
+                                            shareHash: shareHash,
+                                            parentHash: parentHash)
                 }
-                //
-                //                DispatchQueue.global().async {
-                //                    self.postPeepToServer(password: <#T##String#>)
-                //                }
                 
                 
             } else {
@@ -98,37 +117,48 @@ class SendPeepViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    //    func postPeepToServer(password: String) {
-    //
-    //        //to get user name
-    //
-    //
-    //
-    //        //to make it clear
-    //        if !textViewEdited {
-    //            self.textView.text = ""
-    //        }
-    //
-    //        let content = textView.text
-    //        if shareHash == nil {
-    //            shareHash = ""
-    //        }
-    //
-    //        if parentHash == nil {
-    //            parentHash = ""
-    //        }
-    //
-    //    }
+    func postPeepToServer(peep createdPeep: CreateServerPeep, withPassword: String) {
+
+        DispatchQueue.global().async {
+            PeepethAuthService.sharedInstance.createPeep(data: createdPeep, completion: { (result) in
+                switch result {
+                case .Success(let resp) :
+                    print(resp)
+                    DispatchQueue.main.async {
+                        self.animation.waitAnimation(isEnabled: false,
+                                                     notificationText: nil,
+                                                     selfView: self.view)
+                        self.showAlertSuccessSendingPeep(peep: createdPeep, password: withPassword)
+                    }
+                    
+                case .Error(let error) :
+                    print(error.localizedDescription)
+                }
+                
+            })
+        }
+
+    }
     
     func showErrorAlert(error: String?) {
-        animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
-        let alert = UIAlertController(title: "Error", message: error!, preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        animation.waitAnimation(isEnabled: false,
+                                notificationText: nil,
+                                selfView: self.view)
+        let alert = UIAlertController(title: "Error",
+                                      message: error!,
+                                      preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel",
+                                         style: .cancel,
+                                         handler: nil)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }
     
-    func prepareTransaction(privateKey: String, password: String, content: String, shareHash: String, parentHash: String) {
+    func prepareTransaction(privateKey: String,
+                            password: String,
+                            content: String,
+                            shareHash: String,
+                            parentHash: String) {
         
         //get your adress
         service.getUntrustedAddress(completion: { (address) in
@@ -142,34 +172,16 @@ class SendPeepViewController: UIViewController {
                                 shareID: shareHash,
                                 parentID: parentHash)
                 
-                self.ipfsService.postToIPFS(data: peep, completion: { (result) in
-                    
-                    switch result {
-                    case .Success(let peepHash):
-                        if self.shareHash != "" {
-                            self.service.prepareSharePeepTransaction(peepDataHash: peepHash, completion: { (result) in
-                                switch result {
-                                case .Success(let transaction):
-                                    self.confirmTransactionAlert(password: password, transaction: transaction)
-                                case .Error(let error):
-                                    self.showErrorAlert(error: error.localizedDescription)
-                                }
-                            })
-                        } else {
-                            self.service.preparePostPeepTransaction(peepDataHash: peepHash, completion: { (result) in
-                                switch result {
-                                case .Success(let transaction):
-                                    self.confirmTransactionAlert(password: password, transaction: transaction)
-                                case .Error(let error):
-                                    self.showErrorAlert(error: error.localizedDescription)
-                                }
-                            })
-                        }
-                    case .Error(let error):
-                        self.showErrorAlert(error: error.localizedDescription)
-                    }
-                    
-                })
+                let createdServerPeep = CreateServerPeep(ipfs: "xxx",
+                                                  author: address!,
+                                                  content: content,
+                                                  parentID: parentHash,
+                                                  shareID: shareHash,
+                                                  twitterShare: false,
+                                                  picIpfs: "",
+                                                  origContents: peep,
+                                                  shareNow: true)
+                self.postPeepToServer(peep: createdServerPeep, withPassword: password)
             } else {
                 return
             }
@@ -177,15 +189,57 @@ class SendPeepViewController: UIViewController {
         
     }
     
+    func postToIPFS(peep: Peep, password: String) {
+        self.animation.waitAnimation(isEnabled: true,
+                                     notificationText: "Transaction to blockchain",
+                                     selfView: self.view)
+        DispatchQueue.global().async {
+            self.ipfsService.postToIPFS(data: peep, completion: { (result) in
+                
+                switch result {
+                case .Success(let peepHash):
+                    if self.shareHash != "" {
+                        self.service.prepareSharePeepTransaction(peepDataHash: peepHash, completion: { (result) in
+                            switch result {
+                            case .Success(let transaction):
+                                self.confirmTransactionAlert(password: password, transaction: transaction)
+                            case .Error(let error):
+                                self.showErrorAlert(error: error.localizedDescription)
+                            }
+                        })
+                    } else {
+                        self.service.preparePostPeepTransaction(peepDataHash: peepHash, completion: { (result) in
+                            switch result {
+                            case .Success(let transaction):
+                                self.confirmTransactionAlert(password: password, transaction: transaction)
+                            case .Error(let error):
+                                self.showErrorAlert(error: error.localizedDescription)
+                            }
+                        })
+                    }
+                case .Error(let error):
+                    self.showErrorAlert(error: error.localizedDescription)
+                }
+                
+            })
+        }
+        
+    }
+    
     func confirmTransactionAlert(password: String, transaction: (TransactionIntermediate)) {
         
-        animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
+        animation.waitAnimation(isEnabled: false,
+                                notificationText: nil,
+                                selfView: self.view)
         
         let alert = UIAlertController(title: "Confirm transaction", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
         alert.addTextField { (textField) in
             //gas price
-            let gasPrice = Web3Utils.formatToEthereumUnits(transaction.transaction.gasPrice, toUnits: .eth, decimals: 16, decimalSeparator: ".")!
+            let gasPrice = Web3Utils.formatToEthereumUnits(transaction.transaction.gasPrice,
+                                                           toUnits: .eth,
+                                                           decimals: 16,
+                                                           decimalSeparator: ".")!
             let intGasPrice = Float(gasPrice)
             let formattedGasPrice = String(intGasPrice!*pow(10, 9))
             textField.text = "Estimated gas price: " + formattedGasPrice + " Gwei"
@@ -195,7 +249,10 @@ class SendPeepViewController: UIViewController {
         }
         alert.addTextField { (textField) in
             //gas limit
-            let gasLimit = Web3Utils.formatToEthereumUnits(transaction.transaction.gasLimit, toUnits: .eth, decimals: 16, decimalSeparator: ".")!
+            let gasLimit = Web3Utils.formatToEthereumUnits(transaction.transaction.gasLimit,
+                                                           toUnits: .eth,
+                                                           decimals: 16,
+                                                           decimalSeparator: ".")!
             let intGasLimit = Float(gasLimit)
             let formattedGasLimit = String(intGasLimit!*pow(10, 18))
             textField.text = "Estimated gas limit: " + formattedGasLimit
@@ -205,7 +262,9 @@ class SendPeepViewController: UIViewController {
         }
         
         let confirmTransaction = UIAlertAction(title: "OK", style: .default) { (alertAction) in
-            self.animation.waitAnimation(isEnabled: true, notificationText: "Sending transaction", selfView: self.view)
+            self.animation.waitAnimation(isEnabled: true,
+                                         notificationText: "Sending transaction",
+                                         selfView: self.view)
             self.sendTransaction(password: password, transaction: transaction)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (cancel) in
@@ -220,7 +279,9 @@ class SendPeepViewController: UIViewController {
     
     func sendTransaction(password: String, transaction: (TransactionIntermediate)){
         
-        self.service.sendTransaction(transaction: transaction, password: password, completion: { (result) in
+        self.service.sendTransaction(transaction: transaction,
+                                     password: password,
+                                     completion: { (result) in
             switch result {
             case .Success( _):
                 self.showAlertSuccessTransaction()
@@ -233,13 +294,46 @@ class SendPeepViewController: UIViewController {
     }
     
     func showAlertSuccessTransaction() {
-        animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
-        let alert = UIAlertController(title: "Success transaction", message: "Thank you, now just wait while your transaction is providing in the blockchain. It may take some time :)", preferredStyle: UIAlertControllerStyle.alert)
+        animation.waitAnimation(isEnabled: false,
+                                notificationText: nil,
+                                selfView: self.view)
+        let alert = UIAlertController(title: "Success transaction",
+                                      message: "Thank you, now just wait while your transaction is providing in the blockchain. It may take some time :)",
+                                      preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
             self.dismiss(animated: true, completion: nil)
         }
         alert.addAction(okAction)
         
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func showAlertSuccessSendingPeep(peep: CreateServerPeep, password: String) {
+        animation.waitAnimation(isEnabled: false,
+                                notificationText: nil,
+                                selfView: self.view)
+        let alert = UIAlertController(title: "Success posting peep",
+                                      message: sendingToBlockchain ?
+                                        "Thank you, now just confirm transaction to blockchain :)" :
+            "Thank you for posting peep. Attention: it won't be posted to blockchain until you post it yourself",
+                                      preferredStyle: UIAlertControllerStyle.alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+            if self.sendingToBlockchain {
+                self.postToIPFS(peep: peep.origContents, password: password)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+            
+        }
+        alert.addAction(okAction)
+        if sendingToBlockchain {
+            let cancelAction = UIAlertAction(title: "Cancel transaction",
+                                             style: .cancel,
+                                             handler: { (action) in
+                self.dismiss(animated: true, completion: nil)
+            })
+            alert.addAction(cancelAction)
+        }
         self.present(alert, animated: true, completion: nil)
     }
     
