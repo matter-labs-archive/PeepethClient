@@ -84,3 +84,38 @@ extension ServerPeep: Equatable {
     
 }
 
+
+
+//peep[ipfs]: xxx
+//peep[author]: 0x832a630b949575b87c0e3c00f624f773d9b160f4
+//peep[content]: empty_peep
+//peep[parentID]:
+//peep[shareID]:
+//peep[twitter_share]: false
+//peep[picIpfs]:
+//peep[origContents]: {"type":"peep","content":"empty_peep","pic":"","untrustedAddress":"0x832a630b949575b87c0e3c00f624f773d9b160f4","untrustedTimestamp":1533728914,"shareID":"","parentID":""}
+//share_now: true
+struct CreateServerPeep: Encodable {
+    let ipfs: String
+    let author: String
+    let content: String
+    let parentID: String
+    let shareID: String
+    let twitterShare: Bool
+    let picIpfs: String
+    let origContents: Peep
+    let shareNow: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case ipfs = "peep[ipfs]"
+        case author = "peep[author]"
+        case content = "peep[content]"
+        case parentID = "peep[parentID]"
+        case shareID = "peep[shareID]"
+        case twitterShare = "peep[twitter_share]"
+        case picIpfs = "peep[picIpfs]"
+        case origContents = "peep[origContents]"
+        case shareNow = "share_now"
+    }
+}
+

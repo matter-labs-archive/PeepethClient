@@ -36,9 +36,12 @@ class SendPeepViewController: UIViewController {
         
         if shareHash != nil {
             postTheMessageLabel.text = "Share the message!"
+        } else if parentHash != nil {
+            postTheMessageLabel.text = "Parent the message!"
         } else {
             postTheMessageLabel.text = "Post the message!"
         }
+        
         
         self.hideKeyboardWhenTappedAround()
         service.getETHbalance() { (result, error) in
@@ -120,7 +123,8 @@ class SendPeepViewController: UIViewController {
     func postPeepToServer(peep createdPeep: CreateServerPeep, withPassword: String) {
 
         DispatchQueue.global().async {
-            PeepethAuthService.sharedInstance.createPeep(data: createdPeep, completion: { (result) in
+            let peepethService = PeepethAuthService(with: withPassword)
+            peepethService.createPeep(data: createdPeep, completion: { (result) in
                 switch result {
                 case .Success(let resp) :
                     print(resp)
@@ -200,6 +204,15 @@ class SendPeepViewController: UIViewController {
                 case .Success(let peepHash):
                     if self.shareHash != "" {
                         self.service.prepareSharePeepTransaction(peepDataHash: peepHash, completion: { (result) in
+                            switch result {
+                            case .Success(let transaction):
+                                self.confirmTransactionAlert(password: password, transaction: transaction)
+                            case .Error(let error):
+                                self.showErrorAlert(error: error.localizedDescription)
+                            }
+                        })
+                    } else if self.parentHash != "" {
+                        self.service.prepareReplyPeepTransaction(peepDataHash: peepHash, completion: { (result) in
                             switch result {
                             case .Success(let transaction):
                                 self.confirmTransactionAlert(password: password, transaction: transaction)

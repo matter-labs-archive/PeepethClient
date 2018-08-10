@@ -116,6 +116,31 @@ class Web3swiftService {
         }
     }
     
+    func prepareReplyPeepTransaction(peepDataHash: String, gasLimit: BigUInt = 27500, completion: @escaping (Result<TransactionIntermediate>) -> Void) {
+        DispatchQueue.global().async {
+            let wallet = Web3swiftService.keyservice.selectedWallet()
+            guard let address = wallet?.address else { return }
+            let ethAddressFrom = EthereumAddress(address)
+            
+            let web3 = Web3.InfuraMainnetWeb3()
+            web3.addKeystoreManager(Web3swiftService.keyservice.keystoreManager())
+            
+            var options = Web3Options.defaultOptions()
+            options.from = ethAddressFrom
+            options.value = 0
+            guard let contract = web3.contract(peepEthABI, at: ethContractAddress, abiVersion: 2) else { return }
+            guard let gasPrice = web3.eth.getGasPrice().value else { return }
+            options.gasPrice = gasPrice
+            options.gasLimit = gasLimit
+            guard let transaction = contract.method("reply", parameters: [peepDataHash] as [AnyObject], options: options) else { return }
+            guard case .success(let estimate) = transaction.estimateGas(options: options) else {return}
+            print("estimated cost: \(estimate)")
+            DispatchQueue.main.async {
+                completion(Result.Success(transaction))
+            }
+        }
+    }
+    
     
     //Sending Transaction
     func sendTransaction(transaction: TransactionIntermediate, password: String, completion: @escaping (Result<TransactionSendingResult>) -> Void) {

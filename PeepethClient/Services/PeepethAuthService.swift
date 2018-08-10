@@ -40,7 +40,7 @@ class PeepethAuthService {
     var xCsrfToken: String?
     var xRequestedWith: String?
     
-    init() {
+    init(with userPassword: String? = "") {
 
         self.session = URLSession(configuration: URLSessionConfiguration.ephemeral)
 //        let session = URLSession(configuration: URLSessionConfiguration.ephemeral)
@@ -236,7 +236,7 @@ class PeepethAuthService {
         guard let messageHash = Web3.Utils.hashPersonalMessage(messageData) else {return}
         print("messageHash: 0x" + messageHash.toHexString())
         // TODO: - Another way to retrieve password
-        guard case .success(let signature) = web3Instance.personal.signPersonalMessage(message: messageData, from: address, password: "MYPASSWORD") else {return}
+        guard case .success(let signature) = web3Instance.personal.signPersonalMessage(message: messageData, from: address, password: userPassword!) else {return}
         let hexSignature = "0x" + signature.toHexString()
         print("hex signature =", hexSignature)
         components = URLComponents()
@@ -302,19 +302,16 @@ class PeepethAuthService {
     
     func createPeep(data: CreateServerPeep, completion: @escaping(Result<String>) -> Void) {
         var task: URLSessionDataTask? = nil
-        let url = URL(string: "https://peepeth.com/create_peep")!
-        var request = URLRequest(url: url)
-        request.httpShouldHandleCookies = true
+        
+        let requestForPosting = requestForPostingToServer(data: data)
+        
+        guard var request = requestForPosting else {return}
         request.setValue(self.referer ?? "", forHTTPHeaderField: "Referer")
         request.setValue(self.userAgent ?? "", forHTTPHeaderField: "User-agent")
         request.setValue(self.host ?? "", forHTTPHeaderField: "Host")
         request.setValue(self.origin ?? "", forHTTPHeaderField: "Origin")
         request.setValue(self.xRequestedWith ?? "", forHTTPHeaderField: "X-Requested-With")
         request.setValue(self.xCsrfToken ?? "", forHTTPHeaderField: "X-CSRF-Token")
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded; charset=UTF-8", forHTTPHeaderField: "Content-Type")
-        request.httpBody = "peep%5Bipfs%5D=xxx&peep%5Bauthor%5D=\(data.author.lowercased())&peep%5Bcontent%5D=\(data.content)&peep%5BparentID%5D=\(data.parentID)&peep%5BshareID%5D=\(data.shareID)&peep%5Btwitter_share%5D=\(data.twitterShare)&peep%5BpicIpfs%5D=\(data.picIpfs)&peep%5BorigContents%5D=%7B%22type%22%3A%22\(data.origContents.type)%22%2C%22content%22%3A%22\(data.origContents.content)%22%2C%22pic%22%3A%22\(data.origContents.pic)%22%2C%22untrustedAddress%22%3A%22\(data.origContents.untrustedAddress.lowercased())%22%2C%22untrustedTimestamp%22%3A\(data.origContents.untrustedTimestamp)%2C%22shareID%22%3A%22\(data.origContents.shareID)%22%2C%22parentID%22%3A%22\(data.origContents.parentID)%22%7D&share_now=true".data(using:String.Encoding.utf8, allowLossyConversion: false)
-        
         
         DispatchQueue.global().async {
             task = self.session.dataTask(with: request) { (data, resp, error) in
@@ -343,36 +340,3 @@ class PeepethAuthService {
     }
 }
 
-
-//peep[ipfs]: xxx
-//peep[author]: 0x832a630b949575b87c0e3c00f624f773d9b160f4
-//peep[content]: empty_peep
-//peep[parentID]:
-//peep[shareID]:
-//peep[twitter_share]: false
-//peep[picIpfs]:
-//peep[origContents]: {"type":"peep","content":"empty_peep","pic":"","untrustedAddress":"0x832a630b949575b87c0e3c00f624f773d9b160f4","untrustedTimestamp":1533728914,"shareID":"","parentID":""}
-//share_now: true
-struct CreateServerPeep: Encodable {
-    let ipfs: String
-    let author: String
-    let content: String
-    let parentID: String
-    let shareID: String
-    let twitterShare: Bool
-    let picIpfs: String
-    let origContents: Peep
-    let shareNow: Bool
-    
-    enum CodingKeys: String, CodingKey {
-        case ipfs = "peep[ipfs]"
-        case author = "peep[author]"
-        case content = "peep[content]"
-        case parentID = "peep[parentID]"
-        case shareID = "peep[shareID]"
-        case twitterShare = "peep[twitter_share]"
-        case picIpfs = "peep[picIpfs]"
-        case origContents = "peep[origContents]"
-        case shareNow = "share_now"
-    }
-}

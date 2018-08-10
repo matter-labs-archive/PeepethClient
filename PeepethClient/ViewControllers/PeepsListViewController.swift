@@ -24,7 +24,7 @@ class PeepsListViewController: UIViewController {
     let localDatabase = LocalDatabase()
     var peeps: [ServerPeep]?
     
-    var shareHash: String? = nil
+    var chosenPeepHash: String? = nil
     
     var controllerType: controllerTypes = .global
     
@@ -33,7 +33,7 @@ class PeepsListViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        shareHash = nil
+        chosenPeepHash = nil
     }
     
     override func viewDidLoad() {
@@ -229,8 +229,8 @@ class PeepsListViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let shareViewController = segue.destination as? SendPeepViewController {
-            if shareHash != nil {
-                shareViewController.shareHash = self.shareHash!
+            if chosenPeepHash != nil {
+                shareViewController.shareHash = self.chosenPeepHash!
             }
             
         }
@@ -296,13 +296,39 @@ extension PeepsListViewController: UITableViewDelegate, UITableViewDataSource {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        shareHash = peeps![indexPath.row].info["ipfs"] as? String
+        chosenPeepHash = peeps![indexPath.row].info["ipfs"] as? String
         
-        let strbrd: UIStoryboard = self.storyboard!
-        let shareController: SendPeepViewController = strbrd.instantiateViewController(withIdentifier: "sendPeepViewController") as! SendPeepViewController
-        shareController.shareHash = self.shareHash!
+        showAlertSuccessTransaction()
         
-        self.show(shareController, sender: self)
+//        let strbrd: UIStoryboard = self.storyboard!
+//        let shareController: SendPeepViewController = strbrd.instantiateViewController(withIdentifier: "sendPeepViewController") as! SendPeepViewController
+//        shareController.shareHash = self.shareHash!
+//
+//        self.show(shareController, sender: self)
+    }
+    
+    func showAlertSuccessTransaction() {
+        let alert = UIAlertController(title: "Choose Action",
+                                      message: nil,
+                                      preferredStyle: UIAlertControllerStyle.actionSheet)
+        let shareAction = UIAlertAction(title: "Share", style: .default) { (action) in
+            let strbrd: UIStoryboard = self.storyboard!
+            let shareController: SendPeepViewController = strbrd.instantiateViewController(withIdentifier: "sendPeepViewController") as! SendPeepViewController
+            shareController.shareHash = self.chosenPeepHash!
+    
+            self.show(shareController, sender: self)
+        }
+        let parentAction = UIAlertAction(title: "Parent", style: .default) { (action) in
+            let strbrd: UIStoryboard = self.storyboard!
+            let shareController: SendPeepViewController = strbrd.instantiateViewController(withIdentifier: "sendPeepViewController") as! SendPeepViewController
+            shareController.parentHash = self.chosenPeepHash!
+            
+            self.show(shareController, sender: self)
+        }
+        alert.addAction(shareAction)
+        alert.addAction(parentAction)
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }
 
