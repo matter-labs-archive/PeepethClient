@@ -300,10 +300,10 @@ class PeepethAuthService {
         
     }
     
-    func createPeep(data: CreateServerPeep, completion: @escaping(Result<String>) -> Void) {
+    func createPeep(data: CreateServerPeep, ipfs: String, completion: @escaping(Result<String?>) -> Void) {
         var task: URLSessionDataTask? = nil
         
-        let requestForPosting = requestForPostingToServer(data: data)
+        let requestForPosting = requestForPostingToServer(data: data, ipfs: ipfs)
         
         guard var request = requestForPosting else {return}
         request.setValue(self.referer ?? "", forHTTPHeaderField: "Referer")
@@ -320,14 +320,13 @@ class PeepethAuthService {
                     return
                 }
                 if let resp = resp, let data = data {
-                    
                     do {
                         let responseStatusCode = (resp as! HTTPURLResponse).statusCode
                         let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                        if let hash = jsonData!["hash"] as? String {
+                        if let hash = jsonData!["ipfs"] as? String {
                             completion(Result.Success(hash))
                         } else {
-                            completion(Result.Success(String(responseStatusCode)))
+                            completion(Result.Success(nil))
                         }
                         
                     } catch {
