@@ -42,16 +42,18 @@ QRCodeReaderViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.hideKeyboardWhenTappedAround()
         createButton.setTitle(mode.title(), for: .normal)
         createButton.isEnabled = false
         createButton.alpha = 0.5
         passwordsDontMatch.isHidden = true
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
         if mode == .createKey {
             privateKeyHeight.constant = 0
             qrCodeButton.isUserInteractionEnabled = false
@@ -163,13 +165,12 @@ QRCodeReaderViewControllerDelegate {
 }
 
 extension CreateWalletViewController: UITextFieldDelegate {
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.returnKeyType = createButton.isEnabled ? UIReturnKeyType.done : .next
         textField.textColor = UIColor.blue
         if textField == passwordTextField || textField == repeatPasswordTextField {
             passwordsDontMatch.isHidden = true
         }
-        return true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -189,15 +190,22 @@ extension CreateWalletViewController: UITextFieldDelegate {
                 futureString == repeatPasswordTextField.text {
                 passwordsDontMatch.isHidden = true
                 createButton.isEnabled = (!(enterPrivateKeyTextField.text?.isEmpty ?? true) || mode == .createKey)
+            } else {
+                passwordsDontMatch.isHidden = false
+                createButton.isEnabled = false
             }
         case repeatPasswordTextField:
             if !futureString.isEmpty &&
                 futureString == passwordTextField.text {
                 passwordsDontMatch.isHidden = true
                 createButton.isEnabled = (!(enterPrivateKeyTextField.text?.isEmpty ?? true) || mode == .createKey)
+            } else {
+                passwordsDontMatch.isHidden = false
+                createButton.isEnabled = false
             }
         default:
             createButton.isEnabled = false
+            passwordsDontMatch.isHidden = false
         }
         
         createButton.alpha = createButton.isEnabled ? 1.0 : 0.5
@@ -213,8 +221,8 @@ extension CreateWalletViewController: UITextFieldDelegate {
             textField == passwordTextField else {
                 return true
         }
-        if !(passwordTextField.text?.isEmpty ?? true) &&
-            !(repeatPasswordTextField.text?.isEmpty ?? true) &&
+        if (!(passwordTextField.text?.isEmpty ?? true) ||
+            !(repeatPasswordTextField.text?.isEmpty ?? true)) &&
             passwordTextField.text != repeatPasswordTextField.text {
             passwordsDontMatch.isHidden = false
             repeatPasswordTextField.textColor = UIColor.red

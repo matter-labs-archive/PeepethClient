@@ -325,8 +325,10 @@ extension PeepsListViewController: UITableViewDelegate, UITableViewDataSource {
             
             self.show(shareController, sender: self)
         }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alert.addAction(shareAction)
         alert.addAction(parentAction)
+        alert.addAction(cancelAction)
         
         self.present(alert, animated: true, completion: nil)
     }
