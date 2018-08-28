@@ -56,11 +56,11 @@
                                 <rect key="frame" x="132.5" y="266.5" width="55" height="55"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOC-5D-HjN">
-                                <rect key="frame" x="60" y="220" width="200" height="60"/>
-                                <color key="backgroundColor" red="1" green="0.91953969956724779" blue="0.73286790088462772" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <rect key="frame" x="60" y="298" width="200" height="60"/>
+                                <color key="backgroundColor" red="0.88634200510000005" green="0.57378049499999995" blue="0.2976292593" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <state key="normal" title="Create Wallet">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="createWalletTapped:" destination="qev-T6-SLP" eventType="touchUpInside" id="fgX-Xd-qKL"/>
@@ -68,37 +68,53 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZHY-Ud-HgM">
-                                <rect key="frame" x="60" y="380" width="200" height="60"/>
-                                <color key="backgroundColor" red="1" green="0.83004153746423648" blue="0.72770558849978428" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <rect key="frame" x="60" y="408" width="200" height="60"/>
+                                <color key="backgroundColor" red="0.88634200510000005" green="0.57378049499999995" blue="0.2976292593" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="iMc-ao-IPL"/>
                                     <constraint firstAttribute="width" constant="200" id="zra-R1-aXS"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <state key="normal" title="Import Wallet">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="importWalletTapped:" destination="qev-T6-SLP" eventType="touchUpInside" id="Dwh-jt-M4M"/>
                                     <segue destination="Fjo-ww-rNa" kind="showDetail" identifier="importWallet" id="4wt-fP-S8p"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PeepEth Client" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dV5-L8-66g">
+                                <rect key="frame" x="60" y="162" width="200" height="36"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unofficial" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bBr-iI-4lE">
+                                <rect key="frame" x="194.5" y="203" width="65.5" height="18"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="ZHY-Ud-HgM" firstAttribute="centerX" secondItem="Esb-7M-dWa" secondAttribute="centerX" id="5hO-L9-Gtm"/>
-                            <constraint firstItem="BOC-5D-HjN" firstAttribute="centerY" secondItem="Esb-7M-dWa" secondAttribute="centerY" multiplier="0.85" id="5iv-8D-F6R"/>
                             <constraint firstItem="BOC-5D-HjN" firstAttribute="height" secondItem="ZHY-Ud-HgM" secondAttribute="height" id="719-Je-RhA"/>
                             <constraint firstItem="flX-Hj-f63" firstAttribute="height" secondItem="Esb-7M-dWa" secondAttribute="height" multiplier="0.1" id="9tZ-SN-O6S"/>
                             <constraint firstItem="flX-Hj-f63" firstAttribute="centerX" secondItem="Esb-7M-dWa" secondAttribute="centerX" id="U2g-UD-eM1"/>
                             <constraint firstItem="flX-Hj-f63" firstAttribute="centerY" secondItem="Esb-7M-dWa" secondAttribute="centerY" id="cUQ-BY-c1m"/>
-                            <constraint firstItem="ZHY-Ud-HgM" firstAttribute="top" secondItem="BOC-5D-HjN" secondAttribute="bottom" constant="100" id="dch-WZ-DDC"/>
+                            <constraint firstItem="ZHY-Ud-HgM" firstAttribute="top" secondItem="BOC-5D-HjN" secondAttribute="bottom" constant="50" id="dch-WZ-DDC"/>
+                            <constraint firstItem="BOC-5D-HjN" firstAttribute="top" secondItem="dV5-L8-66g" secondAttribute="bottom" constant="100" id="eGW-Qt-1iy"/>
+                            <constraint firstItem="dV5-L8-66g" firstAttribute="centerX" secondItem="Esb-7M-dWa" secondAttribute="centerX" id="eie-Io-8AX"/>
                             <constraint firstItem="flX-Hj-f63" firstAttribute="width" secondItem="flX-Hj-f63" secondAttribute="height" multiplier="1:1" id="etO-Sb-9Hj"/>
-                            <constraint firstItem="Esb-7M-dWa" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ZHY-Ud-HgM" secondAttribute="bottom" constant="20" id="gI7-bc-Gyz"/>
+                            <constraint firstItem="Esb-7M-dWa" firstAttribute="bottom" secondItem="ZHY-Ud-HgM" secondAttribute="bottom" constant="100" id="gI7-bc-Gyz"/>
                             <constraint firstItem="BOC-5D-HjN" firstAttribute="centerX" secondItem="Esb-7M-dWa" secondAttribute="centerX" id="int-GZ-H6Z"/>
                             <constraint firstItem="BOC-5D-HjN" firstAttribute="width" secondItem="ZHY-Ud-HgM" secondAttribute="width" id="kb1-Tb-wcF"/>
                             <constraint firstItem="flX-Hj-f63" firstAttribute="height" secondItem="Esb-7M-dWa" secondAttribute="height" multiplier="0.15" id="lZ1-9L-DqN"/>
+                            <constraint firstItem="bBr-iI-4lE" firstAttribute="trailing" secondItem="BOC-5D-HjN" secondAttribute="trailing" id="pa0-Nk-mCB"/>
+                            <constraint firstItem="dV5-L8-66g" firstAttribute="trailing" secondItem="BOC-5D-HjN" secondAttribute="trailing" id="u4P-8E-U9q"/>
                             <constraint firstItem="flX-Hj-f63" firstAttribute="centerY" secondItem="Esb-7M-dWa" secondAttribute="centerY" multiplier="0.05" constant="300" id="vSo-V1-67I"/>
+                            <constraint firstItem="bBr-iI-4lE" firstAttribute="top" secondItem="dV5-L8-66g" secondAttribute="bottom" constant="5" id="zrg-pO-C7D"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Esb-7M-dWa"/>
                         <variation key="default">
@@ -206,14 +222,14 @@
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uoP-jV-Gq2">
                                 <rect key="frame" x="60" y="325" width="200" height="60"/>
-                                <color key="backgroundColor" red="0.76488846284665624" green="1" blue="0.55097750456607986" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.88634200510000005" green="0.57378049499999995" blue="0.2976292593" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="FI1-FB-6nS"/>
                                     <constraint firstAttribute="width" constant="200" id="yzJ-Vq-vat"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
                                 <state key="normal" title="Create/Import">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
                                     <action selector="createWalletButtonTapped:" destination="Fjo-ww-rNa" eventType="touchUpInside" id="F8O-i6-9B3"/>
@@ -264,10 +280,9 @@
                                 <color key="textColor" red="0.93725490199999995" green="0.52549019610000003" blue="0.65490196079999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ckz-ip-h7S">
-                                <rect key="frame" x="270" y="265" width="30" height="40"/>
-                                <color key="backgroundColor" red="1" green="0.83004153749999998" blue="0.7277055885" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <state key="normal" title="QR"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ckz-ip-h7S">
+                                <rect key="frame" x="270" y="265" width="24" height="40"/>
+                                <state key="normal" image="qr"/>
                                 <connections>
                                     <action selector="qrScanTapped:" destination="Fjo-ww-rNa" eventType="touchUpInside" id="1eu-0d-Qdr"/>
                                 </connections>
@@ -771,6 +786,7 @@
         <image name="peepLogo" width="1000" height="1000"/>
         <image name="peep_write" width="30" height="30"/>
         <image name="peeps" width="32" height="32"/>
+        <image name="qr" width="24" height="24"/>
         <image name="settings" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
