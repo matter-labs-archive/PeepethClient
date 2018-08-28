@@ -515,7 +515,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sZq-En-RzN">
-                                <rect key="frame" x="70" y="200.5" width="180" height="34"/>
+                                <rect key="frame" x="70" y="199" width="180" height="35.5"/>
                                 <color key="backgroundColor" red="0.88634200510000005" green="0.57378049499999995" blue="0.2976292593" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                 <state key="normal" title="Register in Peepeth">
@@ -527,37 +527,53 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Balance" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l8h-ve-H8e">
-                                <rect key="frame" x="129.5" y="110" width="61" height="21"/>
+                                <rect key="frame" x="125.5" y="114" width="70" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="6" translatesAutoresizingMaskIntoConstraints="NO" id="iy0-1R-mRw">
+                                <rect key="frame" x="20" y="158" width="280" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="naS-Zh-x3B">
-                                <rect key="frame" x="148.5" y="151" width="24" height="30"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
-                                <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <outlet property="delegate" destination="MQB-mr-x6s" id="Im9-V5-xNH"/>
-                                </connections>
-                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address successfully copied" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v74-tS-FJ9">
+                                <rect key="frame" x="51" y="398.5" width="218" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.40784313729999999" green="0.78039215689999997" blue="0.98039215690000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="checkbox_checked" translatesAutoresizingMaskIntoConstraints="NO" id="JbH-GP-Lfh">
+                                <rect key="frame" x="150.5" y="377" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="9BU-Dd-neg"/>
+                                    <constraint firstAttribute="width" constant="20" id="zeB-ag-5y9"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="l8h-ve-H8e" firstAttribute="centerX" secondItem="ulX-m6-xE5" secondAttribute="centerX" id="05L-lM-Ucs"/>
                             <constraint firstItem="oj6-wZ-yFV" firstAttribute="width" secondItem="CcK-tx-fbh" secondAttribute="width" id="0GB-t6-apv"/>
                             <constraint firstItem="oj6-wZ-yFV" firstAttribute="top" secondItem="sZq-En-RzN" secondAttribute="bottom" constant="20" id="0du-rY-hJk"/>
-                            <constraint firstItem="naS-Zh-x3B" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ulX-m6-xE5" secondAttribute="leading" constant="10" id="3zZ-WY-tVO"/>
+                            <constraint firstItem="sZq-En-RzN" firstAttribute="top" secondItem="iy0-1R-mRw" secondAttribute="bottom" constant="20" id="4ab-pM-OrL"/>
+                            <constraint firstItem="iy0-1R-mRw" firstAttribute="top" secondItem="l8h-ve-H8e" secondAttribute="bottom" constant="20" id="5u2-5h-NMc"/>
+                            <constraint firstItem="v74-tS-FJ9" firstAttribute="centerX" secondItem="ulX-m6-xE5" secondAttribute="centerX" id="Kl8-4U-7ae"/>
                             <constraint firstItem="sZq-En-RzN" firstAttribute="centerX" secondItem="ulX-m6-xE5" secondAttribute="centerX" id="LDX-kE-bNs"/>
+                            <constraint firstItem="iy0-1R-mRw" firstAttribute="leading" secondItem="ulX-m6-xE5" secondAttribute="leading" constant="20" id="LYU-Kg-3gW"/>
                             <constraint firstItem="sZq-En-RzN" firstAttribute="width" secondItem="oj6-wZ-yFV" secondAttribute="width" id="V1I-C2-JSH"/>
+                            <constraint firstItem="v74-tS-FJ9" firstAttribute="top" secondItem="CcK-tx-fbh" secondAttribute="bottom" constant="50" id="Vlv-TV-cWA"/>
                             <constraint firstItem="CcK-tx-fbh" firstAttribute="centerY" secondItem="ulX-m6-xE5" secondAttribute="centerY" constant="40" id="VtA-E3-DRw"/>
+                            <constraint firstItem="JbH-GP-Lfh" firstAttribute="centerX" secondItem="ulX-m6-xE5" secondAttribute="centerX" id="Znn-nN-BwT"/>
                             <constraint firstItem="oj6-wZ-yFV" firstAttribute="centerX" secondItem="ulX-m6-xE5" secondAttribute="centerX" id="a9M-0B-hMY"/>
-                            <constraint firstItem="naS-Zh-x3B" firstAttribute="top" secondItem="l8h-ve-H8e" secondAttribute="bottom" constant="20" id="aii-gN-skc"/>
+                            <constraint firstItem="v74-tS-FJ9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ulX-m6-xE5" secondAttribute="leading" constant="10" id="d8E-it-cxY"/>
+                            <constraint firstItem="ulX-m6-xE5" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="v74-tS-FJ9" secondAttribute="bottom" constant="50" id="eY1-Nj-AuQ"/>
+                            <constraint firstItem="iy0-1R-mRw" firstAttribute="centerX" secondItem="ulX-m6-xE5" secondAttribute="centerX" id="fTG-pS-5PH"/>
                             <constraint firstItem="l8h-ve-H8e" firstAttribute="top" relation="lessThanOrEqual" secondItem="ulX-m6-xE5" secondAttribute="top" constant="50" id="h10-3Z-sMC"/>
-                            <constraint firstItem="sZq-En-RzN" firstAttribute="top" secondItem="naS-Zh-x3B" secondAttribute="bottom" constant="20" id="igF-BD-HKg"/>
                             <constraint firstItem="CcK-tx-fbh" firstAttribute="centerX" secondItem="ulX-m6-xE5" secondAttribute="centerX" id="ncX-tw-6v4"/>
                             <constraint firstItem="oj6-wZ-yFV" firstAttribute="centerY" secondItem="ulX-m6-xE5" secondAttribute="centerY" constant="-20" id="nuB-V3-lur"/>
-                            <constraint firstItem="naS-Zh-x3B" firstAttribute="centerX" secondItem="ulX-m6-xE5" secondAttribute="centerX" id="tlu-yX-jkA"/>
+                            <constraint firstItem="v74-tS-FJ9" firstAttribute="top" secondItem="JbH-GP-Lfh" secondAttribute="bottom" constant="2" id="xSg-ux-El4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ulX-m6-xE5"/>
                     </view>
@@ -569,14 +585,16 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="address" destination="naS-Zh-x3B" id="dfR-sl-Koh"/>
+                        <outlet property="addressCopiedImage" destination="JbH-GP-Lfh" id="7FX-Iu-nAC"/>
+                        <outlet property="addressCopiedLabel" destination="v74-tS-FJ9" id="gbD-Sl-yIa"/>
+                        <outlet property="addressLabel" destination="iy0-1R-mRw" id="nLL-Ui-X7d"/>
                         <outlet property="balanceLabel" destination="l8h-ve-H8e" id="VrM-sT-kjD"/>
                         <outlet property="registerButton" destination="sZq-En-RzN" id="v08-Er-rlc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B7f-hF-7r1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2633" y="-799"/>
+            <point key="canvasLocation" x="2632.5" y="-799.64788732394368"/>
         </scene>
         <!--Send Peep View Controller-->
         <scene sceneID="4Ph-mc-yCh">

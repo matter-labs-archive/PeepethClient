@@ -16,6 +16,10 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var balanceLabel: UILabel!
     @IBOutlet weak var registerButton: UIButton!
     
+    @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var addressCopiedLabel: UILabel!
+    @IBOutlet weak var addressCopiedImage: UIImageView!
+    
     let animation = AnimationController()
     
     let localDatabase = LocalDatabase()
@@ -23,11 +27,14 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     let service = Web3swiftService()
     let ipfsService = IPFSService()
     
-    @IBOutlet weak var address: UITextField!
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.initializeGestureRecognizers()
+        
+        addressCopiedLabel.alpha = 0
+        addressCopiedImage.alpha = 0
         
         self.hideKeyboardWhenTappedAround()
         
@@ -44,6 +51,33 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                 self.balanceLabel.text = "ETH Balance: " + ethUnits!
             }
             
+        }
+    }
+    
+    func initializeGestureRecognizers() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.copyAddress))
+        addressLabel.addGestureRecognizer(tap)
+    }
+    
+    @objc func copyAddress() {
+        let pasteboard = UIPasteboard.general
+        service.getUntrustedAddress(completion: { (address) in
+            pasteboard.string = address ?? ""
+        })
+        
+        DispatchQueue.main.async {
+            self.addressCopiedLabel.alpha = 0.0
+            self.addressCopiedImage.alpha = 0.0
+            UIView.animate(withDuration: 1.0,
+                           animations: {
+                            self.addressCopiedLabel.alpha = 1.0
+                            self.addressCopiedImage.alpha = 1.0
+            }, completion: { _ in
+                UIView.animate(withDuration: 2.0, animations: {
+                    self.addressCopiedLabel.alpha = 0.0
+                    self.addressCopiedImage.alpha = 0.0
+                })
+            })
         }
     }
     
@@ -69,7 +103,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         service.getUntrustedAddress(completion: { (address) in
             DispatchQueue.main.async {
                 if address != nil {
-                    self.address.text = "Address: "+address!
+                    self.addressLabel.text = "Address: "+address!
                 } else {
                     self.getUntrustedAddress()
                 }
@@ -108,17 +142,18 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func privateKeyAlert(privateKey: String) {
-        let alert = UIAlertController(title: "Private key", message: nil, preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Private key", message: privateKey, preferredStyle: UIAlertControllerStyle.alert)
         
-        alert.addTextField { (textField) in
-            textField.text = privateKey
-            textField.textAlignment = .center
-            textField.font = UIFont.systemFont(ofSize: 10)
+        let copyAction = UIAlertAction(title: "Copy", style: .default) { (alertAction) in
+            let pasteboard = UIPasteboard.general
+            pasteboard.string = privateKey
         }
-        let showPrivateKey = UIAlertAction(title: "OK", style: .default) { (alertAction) in
+        
+        let closeAction = UIAlertAction(title: "Close", style: .cancel) { (alertAction) in
             _ = alert.textFields![0] as UITextField
         }
-        alert.addAction(showPrivateKey)
+        alert.addAction(copyAction)
+        alert.addAction(closeAction)
         
         self.present(alert, animated: true, completion: nil)
     }
