@@ -121,7 +121,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             textField.placeholder = "Enter your password"
         }
         
-        // TODO: - get private key
         let enterPasswordAction = UIAlertAction(title: "Enter", style: .default) { (alertAction) in
             let passwordTextField = alert.textFields![0] as UITextField
             if let privateKey = self.keysService.getWalletPrivateKey(password: passwordTextField.text!) {
