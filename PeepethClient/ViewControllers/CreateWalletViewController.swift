@@ -153,6 +153,11 @@ QRCodeReaderViewControllerDelegate {
     func reader(_ reader: QRCodeReaderViewController, didScanResult result: QRCodeReaderResult) {
         reader.stopScanning()
         enterPrivateKeyTextField.text = result.value
+        if passwordTextField.text == repeatPasswordTextField.text &&
+            !(passwordTextField.text?.isEmpty ?? true) {
+            createButton.isEnabled = true
+            createButton.alpha = 1
+        }
         dismiss(animated: true, completion: nil)
     }
     
