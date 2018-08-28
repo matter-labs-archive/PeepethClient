@@ -61,7 +61,7 @@ class SendPeepViewController: UIViewController {
         super.viewWillAppear(true)
         lockNowButton.setImage(UIImage(named: "checkbox_unchecked"), for: .normal)
         sendingToBlockchain = false
-        lockNowButton.setTitleColor(UIColor.black, for: .normal)
+        lockNowButton.setTitleColor(UIColor.gray, for: .normal)
         textView.textColor = UIColor.lightGray
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.lightGray.cgColor
@@ -70,7 +70,7 @@ class SendPeepViewController: UIViewController {
     
     @IBAction func lockNowAction(_ sender: UIButton) {
         sendingToBlockchain = !sendingToBlockchain
-        lockNowButton.setTitleColor(sendingToBlockchain ? UIColor.blue : UIColor.black, for: .normal)
+        lockNowButton.setTitleColor(sendingToBlockchain ? UIColor(red: 104/255, green: 199/255, blue: 250/255, alpha: 1) : UIColor.gray, for: .normal)
         lockNowButton.setImage(sendingToBlockchain ?
             UIImage(named: "checkbox_checked") :
             UIImage(named: "checkbox_unchecked"), for: .normal)
