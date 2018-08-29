@@ -173,11 +173,11 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         alert.addTextField { (textField) in
             //textField.isSecureTextEntry = true
-            textField.placeholder = "Enter your user name: MIN 3 Characters"
+            textField.placeholder = "Enter your user name: MIN 3 chars"
         }
         alert.addTextField { (textField) in
             //textField.isSecureTextEntry = true
-            textField.placeholder = "Enter your real name: MIN 3 Characters"
+            textField.placeholder = "Enter your real name: MIN 3 chars"
         }
         alert.addTextField { (textField) in
             textField.isSecureTextEntry = true
