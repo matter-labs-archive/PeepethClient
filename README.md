@@ -1,5 +1,5 @@
 # Hacksummit hackathon contest 
-## Check out our [presentation](https://github.com/matterinc/PeepethClient/blob/master/Peepeth%20presentation.pdf) and [screencast](https://www.youtube.com/watch?v=5wa9ePBd4Ds)
+## Check out our [presentation](https://github.com/matterinc/PeepethClient/blob/master/Peepeth%20presentation.pdf) and [screencast](https://www.youtube.com/watch?v=5wa9ePBd4Ds) (July 8, 2018) - outdated
 It will give you a brief overview of our Dapp and its message.
 
 ## Peepeth iOS Client (Swift)
