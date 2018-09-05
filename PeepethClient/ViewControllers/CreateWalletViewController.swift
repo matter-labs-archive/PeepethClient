@@ -15,9 +15,9 @@ enum WalletKeysMode {
     func title() -> String {
         switch self {
         case .importKey:
-            return "Import wallet"
+            return "Import Wallet"
         case .createKey:
-            return "Create wallet"
+            return "Create Wallet"
         }
     }
 }
@@ -33,6 +33,12 @@ QRCodeReaderViewControllerDelegate {
     @IBOutlet weak var enterPrivateKeyTextField: UITextField!
     @IBOutlet weak var privateKeyHeight: NSLayoutConstraint!
     @IBOutlet weak var qrCodeButton: UIButton!
+    @IBOutlet weak var enterPrivateKeyLabel: NSLayoutConstraint!
+    @IBOutlet weak var enterKeyLabel: UILabel!
+    @IBOutlet weak var qrLabel: UILabel!
+    @IBOutlet weak var orQrLabel: UILabel!
+    @IBOutlet weak var qrImageHeigh: NSLayoutConstraint!
+    @IBOutlet weak var qrLabelHeight: NSLayoutConstraint!
     
     var mode: WalletKeysMode = .createKey
     let keysService: KeysService = KeysService()
@@ -43,6 +49,8 @@ QRCodeReaderViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.title = mode.title()
         self.hideKeyboardWhenTappedAround()
         createButton.setTitle(mode.title(), for: .normal)
         createButton.isEnabled = false
@@ -55,9 +63,16 @@ QRCodeReaderViewControllerDelegate {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         if mode == .createKey {
+            qrLabelHeight.constant = 0
+            enterPrivateKeyLabel.constant = 0
+            qrImageHeigh.constant = 0
             privateKeyHeight.constant = 0
-            qrCodeButton.isUserInteractionEnabled = false
+            orQrLabel.alpha = 0
+            qrLabel.alpha = 0
+            enterKeyLabel.alpha = 0
             qrCodeButton.alpha = 0
+            qrCodeButton.isUserInteractionEnabled = false
+            enterPrivateKeyTextField.isUserInteractionEnabled = false
         }
     }
     

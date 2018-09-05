@@ -8,15 +8,13 @@ import UIKit
 class LoginViewController: UIViewController {
 
     @IBOutlet weak var logoImage: UIImageView!
-    @IBOutlet weak var logoVerticalCenterConstraint: NSLayoutConstraint!
     @IBOutlet weak var logoHeightStartConstraint: NSLayoutConstraint!
-    @IBOutlet weak var logoMovingToTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var logoHeightEndConstraint: NSLayoutConstraint!
     @IBOutlet weak var createWalletButton: UIButton!
     @IBOutlet weak var importWalletButton: UIButton!
     @IBOutlet weak var logoTitle: UILabel!
     @IBOutlet weak var logoSubtitle: UILabel!
-    @IBOutlet weak var logoImageToTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var logoTitleRight: UILabel!
     
     var walletKeysMode: WalletKeysMode = .createKey
     
@@ -28,6 +26,7 @@ class LoginViewController: UIViewController {
         self.importWalletButton.alpha = 0
         self.logoTitle.alpha = 0
         self.logoSubtitle.alpha = 0
+        self.logoTitleRight.alpha = 0
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,9 +38,6 @@ class LoginViewController: UIViewController {
         super.viewDidAppear(animated)
         
         //Enter animation
-        logoVerticalCenterConstraint.isActive = false
-        logoImageToTopConstraint.isActive = true
-        logoMovingToTopConstraint.isActive = true
         logoHeightStartConstraint.isActive = false
         logoHeightEndConstraint.isActive = true
         
@@ -53,16 +49,48 @@ class LoginViewController: UIViewController {
             self.importWalletButton.alpha = 1
             self.logoTitle.alpha = 1
             self.logoSubtitle.alpha = 1
-            
+            self.logoTitleRight.alpha = 1
         }
         
     }
     
     @IBAction func createWalletTapped(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
         walletKeysMode = .createKey
     }
     @IBAction func importWalletTapped(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
         walletKeysMode = .importKey
+    }
+    
+    @IBAction func buttonTouchedDown(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05,
+                       animations: {
+                        sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)},
+                       completion: nil)
+    }
+    
+    @IBAction func buttonTouchedDragInside(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05,
+                       animations: {
+                        sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)},
+                       completion: nil)
+    }
+    
+    @IBAction func buttonTouchedDragOutside(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
+    }
+    
+    @IBAction func touchCancel(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
