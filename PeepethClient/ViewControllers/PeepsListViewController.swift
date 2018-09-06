@@ -44,6 +44,11 @@ class PeepsListViewController: UIViewController {
             self.initWithRegisteredAcc()
             
         } else {
+            DispatchQueue.main.async {
+                self.animation.waitAnimation(isEnabled: true,
+                                             notificationText: "Preparing...",
+                                             selfView: self.view)
+            }
             web3service.getUntrustedAddress(completion: { (address) in
                 DispatchQueue.main.async {
                     if address != nil {
@@ -56,20 +61,23 @@ class PeepsListViewController: UIViewController {
                                     self.initWithRegisteredAcc()
                                 } else {
                                     self.peepOrRegButton.isEnabled = false
-                                    self.tabBarController?.selectedIndex = 2
+                                    self.tabBarController?.viewControllers?.remove(at: 0)
+                                    self.tabBarController?.viewControllers?.remove(at: 1)
                                     self.showEnterAlert()
                                 }
                                 
                             case .Error(let _):
                                 self.peepOrRegButton.isEnabled = false
-                                self.tabBarController?.selectedIndex = 2
+                                self.tabBarController?.viewControllers?.remove(at: 0)
+                                self.tabBarController?.viewControllers?.remove(at: 1)
                                 self.showEnterAlert()
                             }
                             
                         })
                     } else {
                         self.peepOrRegButton.isEnabled = false
-                        self.tabBarController?.selectedIndex = 2
+                        self.tabBarController?.viewControllers?.remove(at: 0)
+                        self.tabBarController?.viewControllers?.remove(at: 1)
                         self.showEnterAlert()
                     }
                 }
@@ -80,6 +88,11 @@ class PeepsListViewController: UIViewController {
     
     //Init full functionality
     func initWithRegisteredAcc() {
+        DispatchQueue.main.async {
+            self.animation.waitAnimation(isEnabled: false,
+                                         notificationText: nil,
+                                         selfView: self.view)
+        }
         self.tabBarController?.selectedIndex = 0
         switch self.restorationIdentifier {
         case "UserPeepsListViewController":
@@ -130,15 +143,25 @@ class PeepsListViewController: UIViewController {
     
     func getPeepsList(older: Bool) {
         
+        DispatchQueue.main.async {
+            let view = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height))
+            view.alpha = 0
+            view.tag = 111
+            self.view.addSubview(view)
+            self.animation.waitAnimation(isEnabled: true,
+                                         notificationText: "Getting peeps",
+                                         selfView: self.view.subviews.last!)
+        }
+        
         let url = searchingString == nil ? urlForGetPeeps(type: controllerType, walletAddress: KeysService().selectedWallet()?.address, lastPeep: older ? peeps?.last : nil) : urlForSearchPeeps(searchingString: searchingString!, page: searchingPage)
         
         guard url != nil else {
             return
         }
         
-        if !refreshControl.isRefreshing {
-            animation.waitAnimation(isEnabled: true, notificationText: "Getting peeps", selfView: tableView)
-        }
+//        if refreshControl.isRefreshing {
+//            animation.waitAnimation(isEnabled: true, notificationText: "Getting peeps", selfView: tableView)
+//        }
         
         PeepsService().getPeeps(url: url!){ (receivedPeeps, error) in
             if (error != nil) {
@@ -171,7 +194,12 @@ class PeepsListViewController: UIViewController {
                         self.getPeepsList(older: older)
                         self.refreshControl.endRefreshing()
                     }
-                    self.animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.tableView)
+                    DispatchQueue.main.async {
+                        self.animation.waitAnimation(isEnabled: false,
+                                                     notificationText: nil,
+                                                     selfView: self.view.viewWithTag(111)!)
+                        self.view.viewWithTag(111)?.removeFromSuperview()
+                    }
                 }
                 
             }
@@ -315,6 +343,7 @@ extension PeepsListViewController: UITableViewDelegate, UITableViewDataSource {
             let strbrd: UIStoryboard = self.storyboard!
             let shareController: SendPeepViewController = strbrd.instantiateViewController(withIdentifier: "sendPeepViewController") as! SendPeepViewController
             shareController.shareHash = self.chosenPeepHash!
+            self.chosenPeepHash = nil
     
             self.show(shareController, sender: self)
         }
@@ -322,6 +351,8 @@ extension PeepsListViewController: UITableViewDelegate, UITableViewDataSource {
             let strbrd: UIStoryboard = self.storyboard!
             let shareController: SendPeepViewController = strbrd.instantiateViewController(withIdentifier: "sendPeepViewController") as! SendPeepViewController
             shareController.parentHash = self.chosenPeepHash!
+            
+            self.chosenPeepHash = nil
             
             self.show(shareController, sender: self)
         }

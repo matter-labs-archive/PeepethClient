@@ -43,7 +43,7 @@ class PeepCell: UITableViewCell {
             sharedLabel.text = "Shared"
         }
         if peep.parent {
-            sharedLabel.text = "Parent"
+            sharedLabel.text = "Replied"
         }
         if !peep.parent && !peep.shared {
             self.separatorView.backgroundColor = UIColor.lightGray
@@ -74,6 +74,7 @@ class PeepCell: UITableViewCell {
         self.userAvatar.image = UIImage(named: "peepLogo")
         self.sharedLabel.isHidden = true
         self.separatorView.backgroundColor = UIColor.white
+        self.leftConstraint.constant = 5
     }
     
 }
