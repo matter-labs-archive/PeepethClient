@@ -13,6 +13,7 @@ class PeepCell: UITableViewCell {
     @IBOutlet weak var userAvatar: UIImageView!
     @IBOutlet weak var sharedLabel: UILabel!
     @IBOutlet weak var separatorView: UIView!
+    @IBOutlet weak var attachedImage: UIImageView!
     
     @IBOutlet weak var leftConstraint: NSLayoutConstraint!
     
@@ -28,12 +29,20 @@ class PeepCell: UITableViewCell {
         userNameLabel.text = peep.info["realName"] as? String
         nickNameLabel.text = (peep.info["name"] != nil) ? "@"+(peep.info["name"] as? String)! : nil
         messageLabel.text = peep.info["content"] as? String
+        
         print(messageLabel.text!)
         if let imageData = peep.info["avatar_imageData"] {
             let image = UIImage(data: imageData as! Data)
             self.userAvatar.image = image
         } else {
             self.userAvatar.image = UIImage(named: "peepLogo")
+        }
+        
+        if let attachedImageData = peep.info["attached_imageData"] {
+            let image = UIImage(data: attachedImageData as! Data)
+            self.attachedImage.image = image
+        } else {
+            self.attachedImage.image = nil
         }
         
         // if peep has parent or it is shared
@@ -43,7 +52,7 @@ class PeepCell: UITableViewCell {
             sharedLabel.text = "Shared"
         }
         if peep.parent {
-            sharedLabel.text = "Parent"
+            sharedLabel.text = "Replied"
         }
         if !peep.parent && !peep.shared {
             self.separatorView.backgroundColor = UIColor.lightGray
@@ -74,6 +83,8 @@ class PeepCell: UITableViewCell {
         self.userAvatar.image = UIImage(named: "peepLogo")
         self.sharedLabel.isHidden = true
         self.separatorView.backgroundColor = UIColor.white
+        self.leftConstraint.constant = 5
+        self.attachedImage.image = nil
     }
     
 }

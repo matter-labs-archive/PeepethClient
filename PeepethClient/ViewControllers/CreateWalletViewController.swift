@@ -15,9 +15,9 @@ enum WalletKeysMode {
     func title() -> String {
         switch self {
         case .importKey:
-            return "Import wallet"
+            return "Import Wallet"
         case .createKey:
-            return "Create wallet"
+            return "Create Wallet"
         }
     }
 }
@@ -33,6 +33,12 @@ QRCodeReaderViewControllerDelegate {
     @IBOutlet weak var enterPrivateKeyTextField: UITextField!
     @IBOutlet weak var privateKeyHeight: NSLayoutConstraint!
     @IBOutlet weak var qrCodeButton: UIButton!
+    @IBOutlet weak var enterPrivateKeyLabel: NSLayoutConstraint!
+    @IBOutlet weak var enterKeyLabel: UILabel!
+    @IBOutlet weak var qrLabel: UILabel!
+    @IBOutlet weak var orQrLabel: UILabel!
+    @IBOutlet weak var qrImageHeigh: NSLayoutConstraint!
+    @IBOutlet weak var qrLabelHeight: NSLayoutConstraint!
     
     var mode: WalletKeysMode = .createKey
     let keysService: KeysService = KeysService()
@@ -43,6 +49,8 @@ QRCodeReaderViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.title = mode.title()
         self.hideKeyboardWhenTappedAround()
         createButton.setTitle(mode.title(), for: .normal)
         createButton.isEnabled = false
@@ -55,13 +63,20 @@ QRCodeReaderViewControllerDelegate {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         if mode == .createKey {
+            qrLabelHeight.constant = 0
+            enterPrivateKeyLabel.constant = 0
+            qrImageHeigh.constant = 0
             privateKeyHeight.constant = 0
-            qrCodeButton.isUserInteractionEnabled = false
+            orQrLabel.alpha = 0
+            qrLabel.alpha = 0
+            enterKeyLabel.alpha = 0
             qrCodeButton.alpha = 0
+            qrCodeButton.isUserInteractionEnabled = false
+            enterPrivateKeyTextField.isUserInteractionEnabled = false
         }
     }
     
-    @IBAction func createWalletButtonTapped(_ sender: Any) {
+    func createWallet() {
         guard passwordTextField.text == repeatPasswordTextField.text else {
             passwordsDontMatch.isHidden = false
             return
@@ -113,8 +128,13 @@ QRCodeReaderViewControllerDelegate {
                     })
                 }
             }
-            
-            
+        }
+    }
+    
+    @IBAction func createWalletButtonTapped(_ sender: UIButton) {
+        createWallet()
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
         }
     }
     
@@ -131,14 +151,42 @@ QRCodeReaderViewControllerDelegate {
         self.present(alert, animated: true, completion: nil)
     }
     
+    @IBAction func buttonTouchedDown(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05,
+                       animations: {
+                        sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)},
+                       completion: nil)
+    }
+    
+    @IBAction func buttonTouchedDragInside(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05,
+                       animations: {
+                        sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)},
+                       completion: nil)
+    }
+    
+    @IBAction func buttonTouchedDragOutside(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
+    }
+    
+    @IBAction func touchCancel(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
+    }
+    
     //QR feature
     
-    @IBAction func qrScanTapped(_ sender: Any) {
+    @IBAction func qrScanTapped(_ sender: UIButton) {
         readerVC.delegate = self
-        
         readerVC.completionBlock = { (result: QRCodeReaderResult?) in }
         readerVC.modalPresentationStyle = .formSheet
         present(readerVC, animated: true, completion: nil)
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
     }
     
     // Scan
@@ -172,7 +220,7 @@ QRCodeReaderViewControllerDelegate {
 extension CreateWalletViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.returnKeyType = createButton.isEnabled ? UIReturnKeyType.done : .next
-        textField.textColor = UIColor.blue
+        textField.textColor = UIColor.orange
         if textField == passwordTextField || textField == repeatPasswordTextField {
             passwordsDontMatch.isHidden = true
         }
@@ -187,7 +235,7 @@ extension CreateWalletViewController: UITextFieldDelegate {
         case enterPrivateKeyTextField:
             if passwordTextField.text == repeatPasswordTextField.text &&
                 !(passwordTextField.text?.isEmpty ?? true) &&
-                !futureString.isEmpty {
+                !futureString.isEmpty && ((passwordTextField.text?.count)! > 4) {
                 createButton.isEnabled = true
             }
         case passwordTextField:
@@ -230,6 +278,14 @@ extension CreateWalletViewController: UITextFieldDelegate {
             !(repeatPasswordTextField.text?.isEmpty ?? true)) &&
             passwordTextField.text != repeatPasswordTextField.text {
             passwordsDontMatch.isHidden = false
+            passwordsDontMatch.text = "Passwords don't match"
+            repeatPasswordTextField.textColor = UIColor.red
+            passwordTextField.textColor = UIColor.red
+        } else if  (!(passwordTextField.text?.isEmpty ?? true) ||
+            !(repeatPasswordTextField.text?.isEmpty ?? true)) &&
+            ((passwordTextField.text?.count)! < 5){
+            passwordsDontMatch.isHidden = false
+            passwordsDontMatch.text = "Password is too short"
             repeatPasswordTextField.textColor = UIColor.red
             passwordTextField.textColor = UIColor.red
         } else {
@@ -241,8 +297,8 @@ extension CreateWalletViewController: UITextFieldDelegate {
     
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField.returnKeyType == .done && createButton.isEnabled {
-            createWalletButtonTapped(self)
+        if textField.returnKeyType == .done && createButton.isEnabled && ((passwordTextField.text?.count)! > 4) {
+            createWallet()
         } else if textField.returnKeyType == .next {
             let index = textFields.index(of: textField) ?? 0
             let nextIndex = (index == textFields.count - 1) ? 0 : index + 1

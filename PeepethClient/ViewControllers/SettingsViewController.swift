@@ -41,6 +41,8 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         if localDatabase.isWalletRegistered() {
             registerButton.isUserInteractionEnabled = false
             registerButton.alpha = 0
+        } else {
+            showEnterAlert()
         }
         
         getUntrustedAddress()
@@ -113,6 +115,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func showPrivateKey(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
         
         let alert = UIAlertController(title: "Show private key", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
@@ -158,6 +163,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func logout(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
         localDatabase.deleteWallet { (error) in
             if error == nil {
                 let viewController = self.storyboard?.instantiateViewController(withIdentifier: "enterController") as! EnterViewController
@@ -169,6 +177,9 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func registerAction(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
         let alert = UIAlertController(title: "Register in Peep", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
         alert.addTextField { (textField) in
@@ -222,6 +233,32 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         
         self.present(alert, animated: true, completion: nil)
         
+    }
+    
+    @IBAction func buttonTouchedDown(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05,
+                       animations: {
+                        sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)},
+                       completion: nil)
+    }
+    
+    @IBAction func buttonTouchedDragInside(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05,
+                       animations: {
+                        sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)},
+                       completion: nil)
+    }
+    
+    @IBAction func buttonTouchedDragOutside(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
+    }
+    
+    @IBAction func touchCancel(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
     }
     
     func prepareTransaction(privateKey: String, password: String, realName: String, userName: String) {
@@ -319,7 +356,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     
     func showAlertSuccessTransaction() {
         animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
-        let alert = UIAlertController(title: "Success transaction", message: "Thank you, now just wait while your transaction is providing in the blockchain. It may take some time :) Restart App to correctly log in after it", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Success transaction", message: "Thank you, now just wait while your transaction is providing in the blockchain. It may take some time :) Track your transaction on Etherscan. Restart PeepEth to correctly sign in after it will be provided", preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
         }
         alert.addAction(okAction)
@@ -331,6 +368,13 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
         let alert = UIAlertController(title: "Error", message: error!, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    func showEnterAlert() {
+        let alert = UIAlertController(title: "Registration", message: "Add funds to your wallet and register in Peepeth", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
         self.present(alert, animated: true, completion: nil)
     }

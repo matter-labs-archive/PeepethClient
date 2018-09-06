@@ -14,7 +14,6 @@ class SendPeepViewController: UIViewController {
     
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var balanceLabel: UILabel!
-    @IBOutlet weak var postTheMessageLabel: UILabel!
     @IBOutlet weak var lockNowButton: UIButton!
     
     var textViewEdited = false
@@ -34,14 +33,16 @@ class SendPeepViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if shareHash != nil {
-            postTheMessageLabel.text = "Share the message!"
-        } else if parentHash != nil {
-            postTheMessageLabel.text = "Parent the message!"
-        } else {
-            postTheMessageLabel.text = "Post the message!"
-        }
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         
+        if shareHash != nil {
+            
+            self.title = "Share the message!"
+        } else if parentHash != nil {
+            self.title = "Parent the message!"
+        } else {
+            self.title = "Post the message!"
+        }
         
         self.hideKeyboardWhenTappedAround()
         service.getETHbalance() { (result, error) in
@@ -59,9 +60,8 @@ class SendPeepViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        lockNowButton.setImage(UIImage(named: "checkbox_unchecked"), for: .normal)
+        lockNowButton.setBackgroundImage(UIImage(named: "checkbox_unchecked"), for: .normal)
         sendingToBlockchain = false
-        lockNowButton.setTitleColor(UIColor.gray, for: .normal)
         textView.textColor = UIColor.lightGray
         textView.layer.borderWidth = 1.0
         textView.layer.borderColor = UIColor.lightGray.cgColor
@@ -70,13 +70,42 @@ class SendPeepViewController: UIViewController {
     
     @IBAction func lockNowAction(_ sender: UIButton) {
         sendingToBlockchain = !sendingToBlockchain
-        lockNowButton.setTitleColor(sendingToBlockchain ? UIColor(red: 104/255, green: 199/255, blue: 250/255, alpha: 1) : UIColor.gray, for: .normal)
-        lockNowButton.setImage(sendingToBlockchain ?
+        lockNowButton.setBackgroundImage(sendingToBlockchain ?
             UIImage(named: "checkbox_checked") :
             UIImage(named: "checkbox_unchecked"), for: .normal)
     }
     
+    @IBAction func buttonTouchedDown(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05,
+                       animations: {
+                        sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)},
+                       completion: nil)
+    }
+    
+    @IBAction func buttonTouchedDragInside(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05,
+                       animations: {
+                        sender.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)},
+                       completion: nil)
+    }
+    
+    @IBAction func buttonTouchedDragOutside(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
+    }
+    
+    @IBAction func touchCancel(_ sender: UIButton) {
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
+    }
+    
     @IBAction func postPeep(_ sender: UIButton) {
+        
+        UIView.animate(withDuration: 0.05) {
+            sender.transform = CGAffineTransform.identity
+        }
         
         let alert = UIAlertController(title: "Send peep", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
@@ -87,9 +116,11 @@ class SendPeepViewController: UIViewController {
         
         //get private key
         let enterPasswordAction = UIAlertAction(title: "Enter", style: .default) { (alertAction) in
-            self.animation.waitAnimation(isEnabled: true,
-                                         notificationText: "Preparing transaction",
-                                         selfView: self.view)
+            DispatchQueue.main.async {
+                self.animation.waitAnimation(isEnabled: true,
+                                             notificationText: "Preparing transaction",
+                                             selfView: self.view)
+            }
             let passwordText = alert.textFields![0].text!
             if let privateKey = self.keysService.getWalletPrivateKey(password: passwordText) {
                 
@@ -156,7 +187,14 @@ class SendPeepViewController: UIViewController {
     }
     
     func postPeepToServer(peep createdPeep: CreateServerPeep, ipfsHash: String, withPassword: String) {
-
+        DispatchQueue.main.async {
+            self.animation.waitAnimation(isEnabled: false,
+                                         notificationText: nil,
+                                         selfView: self.view)
+            self.animation.waitAnimation(isEnabled: true,
+                                         notificationText: "Transaction to server",
+                                         selfView: self.view)
+        }
         DispatchQueue.global().async {
             let peepethService = PeepethAuthService(with: withPassword)
             peepethService.createPeep(data: createdPeep, ipfs: ipfsHash, completion: { (result) in
@@ -188,9 +226,14 @@ class SendPeepViewController: UIViewController {
     }
     
     func postToIPFS(peep: CreateServerPeep, password: String) {
-        self.animation.waitAnimation(isEnabled: true,
-                                     notificationText: "Transaction to blockchain",
-                                     selfView: self.view)
+        DispatchQueue.main.async {
+            self.animation.waitAnimation(isEnabled: false,
+                                         notificationText: nil,
+                                         selfView: self.view)
+            self.animation.waitAnimation(isEnabled: true,
+                                         notificationText: "Transaction to IPFS",
+                                         selfView: self.view)
+        }
         DispatchQueue.global().async {
             self.ipfsService.postToIPFS(data: peep.origContents, completion: { (result) in
                 
@@ -208,9 +251,11 @@ class SendPeepViewController: UIViewController {
     
     func confirmTransactionAlert(password: String, transaction: (TransactionIntermediate)) {
         
-        animation.waitAnimation(isEnabled: false,
-                                notificationText: nil,
-                                selfView: self.view)
+        DispatchQueue.main.async {
+            self.animation.waitAnimation(isEnabled: false,
+                                         notificationText: nil,
+                                         selfView: self.view)
+        }
         
         let alert = UIAlertController(title: "Confirm transaction", message: nil, preferredStyle: UIAlertControllerStyle.alert)
         
@@ -242,9 +287,11 @@ class SendPeepViewController: UIViewController {
         }
         
         let confirmTransaction = UIAlertAction(title: "OK", style: .default) { (alertAction) in
-            self.animation.waitAnimation(isEnabled: true,
-                                         notificationText: "Sending transaction",
-                                         selfView: self.view)
+            DispatchQueue.main.async {
+                self.animation.waitAnimation(isEnabled: true,
+                                             notificationText: "Transaction to blockchain",
+                                             selfView: self.view)
+            }
             self.sendTransaction(password: password, transaction: transaction)
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (cancel) in
@@ -274,9 +321,11 @@ class SendPeepViewController: UIViewController {
     }
     
     func showAlertSuccessTransaction() {
-        animation.waitAnimation(isEnabled: false,
-                                notificationText: nil,
-                                selfView: self.view)
+        DispatchQueue.main.async {
+            self.animation.waitAnimation(isEnabled: false,
+                                         notificationText: nil,
+                                         selfView: self.view)
+        }
         let alert = UIAlertController(title: "Success transaction",
                                       message: "Thank you, now just wait while your transaction is providing in the blockchain. It may take some time :)",
                                       preferredStyle: UIAlertControllerStyle.alert)
@@ -299,6 +348,11 @@ class SendPeepViewController: UIViewController {
                                       preferredStyle: UIAlertControllerStyle.alert)
         let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
             if self.sendingToBlockchain {
+                DispatchQueue.main.async {
+                    self.animation.waitAnimation(isEnabled: true,
+                                                 notificationText: "Preparing transaction",
+                                                 selfView: self.view)
+                }
                 if self.shareHash != "" {
                     self.service.prepareSharePeepTransaction(peepDataHash: ipfs, completion: { (result) in
                         switch result {
@@ -365,7 +419,7 @@ extension SendPeepViewController: UITextViewDelegate {
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         textViewEdited = true
-        textView.layer.borderColor = UIColor.blue.cgColor
+        textView.layer.borderColor = UIColor.orange.cgColor
         if firstTimeEditing {
             textView.text = ""
             firstTimeEditing = false
