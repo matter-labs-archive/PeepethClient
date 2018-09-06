@@ -431,15 +431,18 @@
 			baseConfigurationReference = 13A08ED09EDC30AA3F6D8AAF /* Pods-PeepethClient.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8DB897QKJA;
+				DEVELOPMENT_TEAM = 5UH69GW6GE;
 				INFOPLIST_FILE = PeepethClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.baldyash.PeepethClient;
+				PRODUCT_BUNDLE_IDENTIFIER = com.peepethClient.PeepethClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -450,15 +453,18 @@
 			baseConfigurationReference = 3FA0568E29E9730C72F349BD /* Pods-PeepethClient.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8DB897QKJA;
+				DEVELOPMENT_TEAM = 5UH69GW6GE;
 				INFOPLIST_FILE = PeepethClient/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.baldyash.PeepethClient;
+				PRODUCT_BUNDLE_IDENTIFIER = com.peepethClient.PeepethClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
