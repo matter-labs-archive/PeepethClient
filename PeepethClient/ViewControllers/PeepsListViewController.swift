@@ -184,8 +184,11 @@ class PeepsListViewController: UIViewController {
                         }
                         
                         //Download avatars
-                        DispatchQueue.main.async {
+                        DispatchQueue.global().sync {
                             self.getUsersAvatars(for: receivedPeeps)
+                        }
+                        DispatchQueue.global().sync {
+                            self.getAttachedImages(for: receivedPeeps)
                         }
                         
                         self.refreshControl.endRefreshing()
@@ -204,6 +207,27 @@ class PeepsListViewController: UIViewController {
                 
             }
             
+        }
+    }
+    
+    /*
+     Get attached images for each user and reload its row
+     */
+    func getAttachedImages(for peeps: [ServerPeep]?) {
+        for peep in peeps! {
+            if let url = parseAttachedImageServerString(peep: peep) {
+                
+                PeepsService().getDataFromUrl(url: url, completion: { (imageData, response, error) in
+                    DispatchQueue.main.async {
+                        if imageData != nil {
+                            let row = (self.peeps)!.index(of: peep)
+                            self.peeps![row!].info["attached_imageData"] = imageData
+                            self.tableView.reloadRows(at: [[0, row!]], with: .none)
+                        }
+                    }
+                })
+                
+            }
         }
     }
     
@@ -286,7 +310,6 @@ extension PeepsListViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PeepCell", for: indexPath) as! PeepCell
         
         cell.peep = peeps![indexPath.row]
-        
         cell.selectionStyle = UITableViewCellSelectionStyle.default
         
         return cell

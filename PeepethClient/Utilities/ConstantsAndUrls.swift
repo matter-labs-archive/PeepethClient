@@ -57,6 +57,18 @@ func parseImageServerString(peep: ServerPeep) -> URL? {
     return URL(string: "https://\(serverString).s3-us-west-1.amazonaws.com/images/avatars/\(nameString)/small.\(extString)")
 }
 
+func parseAttachedImageServerString(peep: ServerPeep) -> URL? {
+    
+    guard let peepAttachedImageUrlString = peep.info["image_url"] as? String else { return nil }
+//    
+//    let parsedString = (peepAvatarUrlString).components(separatedBy: ":")
+//    guard parsedString.count > 2 else { return nil }
+//    let serverString =  parsedString[0]
+//    let nameString = parsedString[1]
+//    let extString = parsedString[2]
+    return URL(string: peepAttachedImageUrlString)
+}
+
 func requestForPostingToServer(data: CreateServerPeep, ipfs: String) -> URLRequest? {
     let url = URL(string: "https://peepeth.com/create_peep")!
     var request = URLRequest(url: url)
