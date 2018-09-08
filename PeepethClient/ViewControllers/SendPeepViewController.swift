@@ -139,6 +139,11 @@ class SendPeepViewController: UIViewController {
                 
             } else {
                 self.showErrorAlert(error: "Wrong password")
+                DispatchQueue.main.async {
+                    self.animation.waitAnimation(isEnabled: false,
+                                                 notificationText: nil,
+                                                 selfView: self.view)
+                }
             }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (cancel) in
@@ -343,10 +348,10 @@ class SendPeepViewController: UIViewController {
                                 selfView: self.view)
         let alert = UIAlertController(title: "Success posting peep",
                                       message: sendingToBlockchain ?
-                                        "Thank you, now just confirm transaction to blockchain :)" :
+                                        "Thank you, now just confirm transaction to blockchain :) If you want, you can sign it inside Dive Lane!!!" :
             "Thank you for posting peep. Attention: it won't be posted to blockchain until you post it yourself",
                                       preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+        let okAction = UIAlertAction(title: "Sign", style: .default) { (action) in
             if self.sendingToBlockchain {
                 DispatchQueue.main.async {
                     self.animation.waitAnimation(isEnabled: true,
@@ -387,11 +392,21 @@ class SendPeepViewController: UIViewController {
             
         }
         alert.addAction(okAction)
+        
+        
         if sendingToBlockchain {
+            let diveLaneAction = UIAlertAction(title: "Dive it!", style: .default) { (action) in
+                let urlString = "ethereum:\(self.keysService.selectedWallet()?.address ?? "")/post?string=\(ipfs)"
+                UIApplication.shared.open(URL(string: urlString)!, options: [:], completionHandler: nil)
+                //self.dismiss(animated: true, completion: nil)
+                
+            }
+            alert.addAction(diveLaneAction)
+            
             let cancelAction = UIAlertAction(title: "Cancel transaction",
                                              style: .cancel,
                                              handler: { (action) in
-                self.dismiss(animated: true, completion: nil)
+                                                self.dismiss(animated: true, completion: nil)
             })
             alert.addAction(cancelAction)
         }
