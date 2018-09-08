@@ -1,10 +1,11 @@
-# Hacksummit hackathon contest 
-## Check out our [presentation](https://github.com/matterinc/PeepethClient/blob/master/Peepeth%20presentation.pdf) and [screencast](https://www.youtube.com/watch?v=5wa9ePBd4Ds) (July 8, 2018) - outdated
-It will give you a brief overview of our Dapp and its message.
+# Peepeth Client (Unofficial) 
+This app created during Hacksummit hackathon contest (and won the prize, btw).
+Check out our [presentation](https://github.com/matterinc/PeepethClient/blob/master/Peepeth%20presentation.pdf) and [screencast](https://www.youtube.com/watch?v=5wa9ePBd4Ds) (July 8, 2018)
+It will give you a brief overview of our Dapp and it's message.
 
 ## Peepeth iOS Client (Swift)
 It shows how easy it is to implement blockchain solutions (DApps) right on your device! Not harder than client-server app, right?
-Peepeth Client for iOS devices, powered by [web3swift lib](https://github.com/BANKEX/web3swift).
+Native (Unofficial) Peepeth Client for iOS devices, powered by [web3swift](https://github.com/matterinc/web3swift).
 
 ## Related challenges
 - [BANKEX Foundation contest](https://source.deco.network/avorobev/challenge-hacksummit-BANKEX#-web3swift-based-projects--5000-bkx)
