@@ -1,5 +1,8 @@
 # Peepeth Client (Unofficial) 
 This app created during Hacksummit hackathon contest (and won the prize, btw).
+
+### [Become a Beta tester](https://peepethclientapp.herokuapp.com/)
+
 Check out our [presentation](https://github.com/matterinc/PeepethClient/blob/master/Peepeth%20presentation.pdf) and [screencast](https://www.youtube.com/watch?v=5wa9ePBd4Ds) (July 8, 2018)
 It will give you a brief overview of our Dapp and it's message.
 
