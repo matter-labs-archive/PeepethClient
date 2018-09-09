@@ -483,7 +483,7 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ExQ-Xo-rpT">
                                                     <rect key="frame" x="58" y="63.666666666666657" width="346" height="72"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="72" id="q64-20-vMJ"/>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" id="q64-20-vMJ"/>
                                                     </constraints>
                                                 </imageView>
                                             </subviews>
