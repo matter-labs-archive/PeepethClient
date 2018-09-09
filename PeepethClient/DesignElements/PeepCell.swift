@@ -41,8 +41,10 @@ class PeepCell: UITableViewCell {
         if let attachedImageData = peep.info["attached_imageData"] {
             let image = UIImage(data: attachedImageData as! Data)
             self.attachedImage.image = image
+            self.attachedImage.isHidden = false
         } else {
             self.attachedImage.image = nil
+            self.attachedImage.isHidden = true
         }
         
         // if peep has parent or it is shared
