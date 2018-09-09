@@ -396,7 +396,7 @@ class SendPeepViewController: UIViewController {
         
         if sendingToBlockchain {
             let diveLaneAction = UIAlertAction(title: "Dive it!", style: .default) { (action) in
-                let urlString = "ethereum:\(self.keysService.selectedWallet()?.address ?? "")/post?string=\(ipfs)"
+                let urlString = "ethereum:0xfa28eC7198028438514b49a3CF353BcA5541ce1d/post?string=\(ipfs)"
                 UIApplication.shared.open(URL(string: urlString)!, options: [:], completionHandler: nil)
                 //self.dismiss(animated: true, completion: nil)
                 
