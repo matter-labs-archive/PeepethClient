@@ -177,31 +177,28 @@ class PeepsListViewController: UIViewController {
                 DispatchQueue.global().sync {
                     if receivedPeeps != nil {
                         if older {
-                            for peep in receivedPeeps! {
-                                DispatchQueue.main.async {
-                                    self.tableView.beginUpdates()
-                                    self.peeps?.append(peep)
-                                    let indexPath = IndexPath(row: (self.peeps?.count)!-2, section: 0)
-                                    self.tableView.insertRows(at: [indexPath], with: .top)
-                                    self.tableView.endUpdates()
-                                }
-                                
+                            self.peeps?.append(contentsOf: receivedPeeps!)
+                            DispatchQueue.main.async {
+                                self.tableView.reloadData()
                             }
+//                            for peep in receivedPeeps! {
+//                                DispatchQueue.main.async {
+//                                    self.peeps?.append(peep)
+//                                    self.tableView.beginUpdates()
+//                                    //self.peeps?.append(peep)
+//                                    let indexPath = IndexPath(row: (self.peeps?.count)!-2, section: 0)
+//                                    self.tableView.insertRows(at: [indexPath], with: .top)
+//                                    self.tableView.endUpdates()
+//
+//                                }
+//
+//                            }
                             
                         } else {
                             DispatchQueue.main.async {
                                 self.peeps = receivedPeeps
                                 self.tableView.reloadData()
                             }
-                        }
-                        
-                        //Download avatars
-                        DispatchQueue.global().sync {
-                            self.getUsersAvatars(for: receivedPeeps)
-                        }
-                        //Download attached
-                        DispatchQueue.global().sync {
-                            self.getAttachedImages(for: receivedPeeps)
                         }
                         
                         DispatchQueue.main.async {
@@ -215,11 +212,25 @@ class PeepsListViewController: UIViewController {
                             self.refreshControl.endRefreshing()
                         }
                     }
-                    DispatchQueue.main.async {
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(3000), execute: {
                         self.animation.waitAnimation(isEnabled: false,
                                                      notificationText: nil,
                                                      selfView: self.view.viewWithTag(lastViewTag)!)
                         self.view.viewWithTag(lastViewTag)?.removeFromSuperview()
+                    })
+                    
+                }
+                
+                DispatchQueue.global().sync {
+                    if receivedPeeps != nil {
+                        self.getUsersAvatars(for: receivedPeeps)
+                    }
+                }
+                
+                DispatchQueue.global().sync {
+                    if receivedPeeps != nil {
+                        self.getAttachedImages(for: receivedPeeps)
                     }
                 }
                 
@@ -234,17 +245,20 @@ class PeepsListViewController: UIViewController {
     func getAttachedImages(for peeps: [ServerPeep]?) {
         for peep in peeps! {
             if let url = parseAttachedImageServerString(peep: peep) {
-                
-                PeepsService().getDataFromUrl(url: url, completion: { (imageData, response, error) in
-                    DispatchQueue.main.async {
-                        if imageData != nil {
-                            let row = (self.peeps)!.index(of: peep)
-                            self.peeps![row!].info["attached_imageData"] = imageData
-                            self.tableView.reloadRows(at: [[0, row!]], with: .none)
+                if url != nil {
+                    PeepsService().getDataFromUrl(url: url, completion: { (imageData, response, error) in
+                        DispatchQueue.main.async {
+                            if imageData != nil {
+                                let row = (self.peeps)!.index(of: peep)
+                                self.peeps![row!].info["attached_imageData"] = imageData
+                                self.tableView.beginUpdates()
+                                self.tableView.reloadRows(at: [[0, row!]], with: .none)
+                                self.tableView.endUpdates()
+                                
+                            }
                         }
-                    }
-                })
-                
+                    })
+                } 
             }
         }
     }
@@ -261,7 +275,9 @@ class PeepsListViewController: UIViewController {
                         if imageData != nil {
                             let row = (self.peeps)!.index(of: peep)
                             self.peeps![row!].info["avatar_imageData"] = imageData
+                            self.tableView.beginUpdates()
                             self.tableView.reloadRows(at: [[0, row!]], with: .none)
+                            self.tableView.endUpdates()
                         }
                     }
                 })

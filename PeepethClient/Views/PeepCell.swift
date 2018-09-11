@@ -15,6 +15,7 @@ class PeepCell: UITableViewCell {
     @IBOutlet weak var separatorView: UIView!
     @IBOutlet weak var attachedImage: UIImageView!
     
+    @IBOutlet weak var attachedHeight: NSLayoutConstraint!
     @IBOutlet weak var leftConstraint: NSLayoutConstraint!
     
     var peep: ServerPeep! {
@@ -38,14 +39,17 @@ class PeepCell: UITableViewCell {
             self.userAvatar.image = UIImage(named: "peepLogo")
         }
         
-        if let attachedImageData = peep.info["attached_imageData"] {
-            let image = UIImage(data: attachedImageData as! Data)
+        if peep.info["image_url"] != nil {
+            let image = peep.info["attached_imageData"] != nil ? UIImage(data: peep.info["attached_imageData"] as! Data) : UIImage(named: "peepLogo")
             self.attachedImage.image = image
             self.attachedImage.isHidden = false
+            self.attachedHeight?.constant = 200
         } else {
             self.attachedImage.image = nil
             self.attachedImage.isHidden = true
+            self.attachedHeight?.constant = 0
         }
+        
         
         // if peep has parent or it is shared
         sharedLabel.isHidden = peep.shared || peep.parent ? false : true
@@ -87,6 +91,7 @@ class PeepCell: UITableViewCell {
         self.separatorView.backgroundColor = UIColor.white
         self.leftConstraint.constant = 5
         self.attachedImage.image = nil
+        //self.attachedHeight.constant = 0
     }
     
 }
