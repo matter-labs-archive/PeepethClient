@@ -35,9 +35,8 @@ QRCodeReaderViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.title = mode.title()
+        //self.navigationController?.navigationBar.prefersLargeTitles = false
         self.hideKeyboardWhenTappedAround()
         createButton.setTitle(mode.title(), for: .normal)
         createButton.isEnabled = false
@@ -48,6 +47,7 @@ QRCodeReaderViewControllerDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         if mode == .createKey {
             qrLabelHeight.constant = 0

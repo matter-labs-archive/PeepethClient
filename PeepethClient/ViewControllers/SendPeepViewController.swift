@@ -32,8 +32,6 @@ class SendPeepViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.navigationController?.navigationBar.prefersLargeTitles = true
         title()
         self.hideKeyboardWhenTappedAround()
         getBalance()
@@ -65,6 +63,7 @@ class SendPeepViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
         lockNowButton.setBackgroundImage(UIImage(named: "checkbox_unchecked"), for: .normal)
         sendingToBlockchain = false
         textView.textColor = UIColor.lightGray

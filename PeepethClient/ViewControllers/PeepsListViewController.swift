@@ -14,7 +14,7 @@ class PeepsListViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var peepOrRegButton: UIBarButtonItem!
     
-    var searchController: UISearchController!
+    //var searchController: UISearchController!
     
     let web3service: Web3swiftService = Web3swiftService()
     let alerts = Alerts()
@@ -31,6 +31,8 @@ class PeepsListViewController: UIViewController {
     
     var searchingString: String? = nil
     var searchingPage = 1
+    
+    lazy var searchBar:UISearchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 200, height: 20))
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
@@ -125,14 +127,19 @@ class PeepsListViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        searchController = UISearchController(searchResultsController: nil)
-        searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        tableView.tableHeaderView = searchController.searchBar
-        searchController.searchBar.delegate = self
-        searchController.searchBar.barTintColor = UIColor.white
-        searchController.searchBar.tintColor = UIColor.darkText
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+        //searchController = UISearchController(searchResultsController: nil)
+        //searchBar
+        //searchController.searchResultsUpdater = self
+        //searchController.dimsBackgroundDuringPresentation = false
+        //tableView.tableHeaderView = searchController.searchBar
+        searchBar.delegate = self
+        searchBar.barTintColor = UIColor.white
+        searchBar.tintColor = UIColor.darkText
         definesPresentationContext = true
+        searchBar.placeholder = "Your placeholder"
+        
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -141,6 +148,7 @@ class PeepsListViewController: UIViewController {
     }
     
     @objc private func refreshTableData(_ sender: Any) {
+        DispatchQueue.cancelPreviousPerformRequests(withTarget: self)
         getPeepsList(older: false)
     }
     
@@ -166,20 +174,25 @@ class PeepsListViewController: UIViewController {
             if (error != nil) {
                 self.getPeepsList(older: older)
             } else {
-                DispatchQueue.main.async {
+                DispatchQueue.global().sync {
                     if receivedPeeps != nil {
                         if older {
                             for peep in receivedPeeps! {
-                                self.tableView.beginUpdates()
-                                self.peeps?.append(peep)
-                                let indexPath = IndexPath(row: (self.peeps?.count)!-2, section: 0)
-                                self.tableView.insertRows(at: [indexPath], with: .top)
-                                self.tableView.endUpdates()
+                                DispatchQueue.main.async {
+                                    self.tableView.beginUpdates()
+                                    self.peeps?.append(peep)
+                                    let indexPath = IndexPath(row: (self.peeps?.count)!-2, section: 0)
+                                    self.tableView.insertRows(at: [indexPath], with: .top)
+                                    self.tableView.endUpdates()
+                                }
+                                
                             }
                             
                         } else {
-                            self.peeps = receivedPeeps
-                            self.tableView.reloadData()
+                            DispatchQueue.main.async {
+                                self.peeps = receivedPeeps
+                                self.tableView.reloadData()
+                            }
                         }
                         
                         //Download avatars
@@ -191,12 +204,16 @@ class PeepsListViewController: UIViewController {
                             self.getAttachedImages(for: receivedPeeps)
                         }
                         
-                        self.refreshControl.endRefreshing()
+                        DispatchQueue.main.async {
+                            self.refreshControl.endRefreshing()
+                        }
                         
                     } else {
                         //TryAgain
                         self.getPeepsList(older: older)
-                        self.refreshControl.endRefreshing()
+                        DispatchQueue.main.async {
+                            self.refreshControl.endRefreshing()
+                        }
                     }
                     DispatchQueue.main.async {
                         self.animation.waitAnimation(isEnabled: false,
@@ -253,16 +270,32 @@ class PeepsListViewController: UIViewController {
         }
     }
     
-    @IBAction func exitAccount(_ sender: UIBarButtonItem) {
-        localDatabase.deleteWallet { (error) in
-            if error == nil {
-                let viewController = self.storyboard?.instantiateViewController(withIdentifier: "enterController") as! EnterViewController
-                self.present(viewController, animated: false, completion: nil)
-            } else {
-                self.alerts.show(error, for: self)
-            }
+    @IBAction func search(_ sender: UIBarButtonItem) {
+        search()
+    }
+    
+    @objc func search() {
+        let searchNavBar = UIBarButtonItem(customView: searchBar)
+        let canceSearchNavBarButton = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                      target: self,
+                                                      action: #selector(cancelSearch) )
+        navigationItem.leftBarButtonItems = [searchNavBar, canceSearchNavBarButton]
+        self.navigationItem.title = nil
+    }
+    
+    @objc func cancelSearch() {
+        self.tableView.setContentOffset(.zero, animated: true)
+        self.searchingString = nil
+        searchingPage = 1
+        self.getPeepsList(older: false)
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
         }
-        
+        let leftNavBarButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(search(_:)))
+        self.navigationItem.leftBarButtonItems = [leftNavBarButton]
+        currentTab(identifier: self.restorationIdentifier)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -375,9 +408,9 @@ extension PeepsListViewController: UISearchResultsUpdating {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if searchController.searchBar.text! != "" {
+        if searchBar.text! != "" {
             self.tableView.setContentOffset(.zero, animated: true)
-            self.searchingString = self.searchController.searchBar.text!
+            self.searchingString = self.searchBar.text!
             self.searchingPage = 1
             self.getPeepsList(older: false)
         } else {
@@ -387,19 +420,17 @@ extension PeepsListViewController: UISearchResultsUpdating {
             self.getPeepsList(older: false)
         }
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            cancelSearch()
+        }
+    }
 }
 
 extension PeepsListViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.tableView.setContentOffset(.zero, animated: true)
-        self.searchingString = nil
-        searchingPage = 1
-        self.getPeepsList(older: false)
-        if #available(iOS 10.0, *) {
-            tableView.refreshControl = refreshControl
-        } else {
-            tableView.addSubview(refreshControl)
-        }
+        cancelSearch()
     }
 }

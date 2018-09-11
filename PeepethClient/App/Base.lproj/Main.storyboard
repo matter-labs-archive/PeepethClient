@@ -536,9 +536,9 @@
                         <viewLayoutGuide key="safeArea" id="lrX-BP-XJu"/>
                     </view>
                     <navigationItem key="navigationItem" id="NRg-x3-46X">
-                        <barButtonItem key="leftBarButtonItem" title="Exit" id="dRE-es-A5H">
+                        <barButtonItem key="leftBarButtonItem" systemItem="search" id="dRE-es-A5H">
                             <connections>
-                                <action selector="exitAccount:" destination="G8g-gM-B4o" id="qYE-4v-A0K"/>
+                                <action selector="search:" destination="G8g-gM-B4o" id="Lbc-G0-AKR"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Peep" image="peep_write" id="5Fz-41-DaO">
@@ -961,9 +961,9 @@
                         <viewLayoutGuide key="safeArea" id="bvc-BJ-i59"/>
                     </view>
                     <navigationItem key="navigationItem" id="d2z-YM-ObM">
-                        <barButtonItem key="leftBarButtonItem" title="Exit" id="Sxn-xH-QUF">
+                        <barButtonItem key="leftBarButtonItem" systemItem="search" id="Sxn-xH-QUF">
                             <connections>
-                                <action selector="exitAccount:" destination="See-Sd-lfK" id="DSP-X5-HeR"/>
+                                <action selector="search:" destination="See-Sd-lfK" id="A4y-bz-DWf"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Peep" image="peep_write" id="WLt-LJ-mUQ">
