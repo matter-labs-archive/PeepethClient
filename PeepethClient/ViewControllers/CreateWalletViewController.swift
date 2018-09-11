@@ -7,21 +7,6 @@ import UIKit
 import web3swift
 import QRCodeReader
 
-enum WalletKeysMode {
-    
-    case importKey
-    case createKey
-    
-    func title() -> String {
-        switch self {
-        case .importKey:
-            return "Import Wallet"
-        case .createKey:
-            return "Create Wallet"
-        }
-    }
-}
-
 class CreateWalletViewController: UIViewController,
 QRCodeReaderViewControllerDelegate {
 
@@ -40,11 +25,13 @@ QRCodeReaderViewControllerDelegate {
     @IBOutlet weak var qrImageHeigh: NSLayoutConstraint!
     @IBOutlet weak var qrLabelHeight: NSLayoutConstraint!
     
-    var mode: WalletKeysMode = .createKey
+    var mode: WalletCreationMode = .createKey
     let keysService: KeysService = KeysService()
     let ipfsService = IPFSService()
     let localStorage = LocalDatabase()
     let web3service: Web3swiftService = Web3swiftService()
+    let alerts = Alerts()
+    let walletController = WalletController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,52 +70,14 @@ QRCodeReaderViewControllerDelegate {
         }
         passwordsDontMatch.isHidden = true
         
-        if mode == .createKey {
-            //Create new wallet
-            keysService.createNewWallet(password: passwordTextField.text!) { (wallet, error) in
-                if let error = error {
-                    self.showErrorAlert(error: error)
-                } else {
-                    //Segue to registration controller(in Peepeth), because if you've just created the wallet, it'll be 100% not registered in Peepeth.
-                    self.localStorage.saveWallet(isRegistered: false, wallet: wallet!) { (error) in
-                        if error == nil {
-                            self.performSegue(withIdentifier: "GoToEnterScreenWithExistingAccount", sender: nil)
-                        } else {
-                            self.showErrorAlert(error: error)
-                        }
-                    }
-                }
+        walletController.createWallet(with: mode, password: passwordTextField.text, key: enterPrivateKeyTextField.text) { (error) in
+            guard error == nil else {
+                self.alerts.show(error, for: self)
+                return
             }
-        } else {
-            //Import wallet
-            keysService.addNewWalletWithPrivateKey(key: enterPrivateKeyTextField.text!, password: passwordTextField.text!) { (wallet, error) in
-                if let error = error {
-                    self.showErrorAlert(error: error)
-                    return
-                } else {
-                    guard let walletStrAddress = wallet?.address, let walletAddress = EthereumAddress(walletStrAddress) else {
-                        self.showErrorAlert(error: nil )
-                        return
-                    }
-                    //Check if account registered to save if it is registered or not into core data
-                    self.web3service.isAccountRegistered(address: walletAddress, completion: { (result) in
-                        switch result {
-                        case .Success(let isRegistered):
-                            self.localStorage.saveWallet(isRegistered: isRegistered, wallet: wallet!) { (error) in
-                                if error == nil {
-                                    self.performSegue(withIdentifier: "GoToEnterScreenWithExistingAccount", sender: nil)
-                                } else {
-                                    self.showErrorAlert(error: error)
-                                }
-                            }
-                        case .Error(let error):
-                            self.showErrorAlert(error: error)
-                        }
-                        
-                    })
-                }
-            }
+            self.performSegue(withIdentifier: "GoToEnterScreenWithExistingAccount", sender: nil)
         }
+        
     }
     
     @IBAction func createWalletButtonTapped(_ sender: UIButton) {
@@ -141,14 +90,6 @@ QRCodeReaderViewControllerDelegate {
     
     @IBAction func backAction(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
-    }
-    
-    
-    func showErrorAlert(error: Error?) {
-        let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        alert.addAction(cancelAction)
-        self.present(alert, animated: true, completion: nil)
     }
     
     @IBAction func buttonTouchedDown(_ sender: UIButton) {

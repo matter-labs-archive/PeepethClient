@@ -34,17 +34,12 @@ class SendPeepViewController: UIViewController {
         super.viewDidLoad()
         
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        
-        if shareHash != nil {
-            
-            self.title = "Share the message!"
-        } else if parentHash != nil {
-            self.title = "Parent the message!"
-        } else {
-            self.title = "Post the message!"
-        }
-        
+        title()
         self.hideKeyboardWhenTappedAround()
+        getBalance()
+    }
+    
+    func getBalance() {
         service.getETHbalance() { (result, error) in
             DispatchQueue.main.async {
                 let ethUnits = Web3Utils.formatToEthereumUnits(result!,
@@ -55,7 +50,17 @@ class SendPeepViewController: UIViewController {
             }
             
         }
-        
+    }
+    
+    func title() {
+        if shareHash != nil {
+            
+            self.title = "Share the message!"
+        } else if parentHash != nil {
+            self.title = "Reply the message!"
+        } else {
+            self.title = "Post the message!"
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

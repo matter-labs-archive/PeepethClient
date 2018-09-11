@@ -16,7 +16,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var logoSubtitle: UILabel!
     @IBOutlet weak var logoTitleRight: UILabel!
     
-    var walletKeysMode: WalletKeysMode = .createKey
+    var walletKeysMode: WalletCreationMode = .createKey
     
     override func viewDidLoad() {
         super.viewDidLoad()

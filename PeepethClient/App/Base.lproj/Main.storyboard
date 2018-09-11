@@ -805,15 +805,24 @@
                                     <action selector="lockNowAction:" destination="Foq-ve-RMu" eventType="touchUpInside" id="QTd-86-tcS"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j5J-2J-PLP">
+                                <rect key="frame" x="213.33333333333334" y="295" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="j5J-2J-PLP" secondAttribute="height" multiplier="1:1" id="TTn-qj-AGH"/>
+                                </constraints>
+                                <state key="normal" image="settings"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="QMN-9G-JHr" firstAttribute="leading" secondItem="j5J-2J-PLP" secondAttribute="trailing" constant="20" id="1m4-hx-xMs"/>
                             <constraint firstItem="vL6-Hr-Jez" firstAttribute="leading" secondItem="pg2-Bq-FOE" secondAttribute="leading" id="5SL-hB-Rk1"/>
                             <constraint firstItem="Zqc-j2-Kon" firstAttribute="top" secondItem="mlh-vg-FfZ" secondAttribute="bottom" constant="20" id="Gr2-dU-qJ1"/>
                             <constraint firstItem="vL6-Hr-Jez" firstAttribute="top" secondItem="pg2-Bq-FOE" secondAttribute="bottom" id="Ir6-qO-7Tm"/>
                             <constraint firstItem="pg2-Bq-FOE" firstAttribute="top" secondItem="tGh-Ka-6TX" secondAttribute="bottom" constant="20" id="Lax-5e-wQu"/>
                             <constraint firstItem="2YE-d2-Q4q" firstAttribute="trailing" secondItem="tGh-Ka-6TX" secondAttribute="trailing" id="MY1-hn-ghQ"/>
                             <constraint firstItem="mlh-vg-FfZ" firstAttribute="top" secondItem="fsH-6j-9LF" secondAttribute="top" constant="20" id="N5G-pB-GlP"/>
+                            <constraint firstItem="j5J-2J-PLP" firstAttribute="centerY" secondItem="QMN-9G-JHr" secondAttribute="centerY" id="WZX-Ze-A6N"/>
                             <constraint firstItem="Zqc-j2-Kon" firstAttribute="centerX" secondItem="fsH-6j-9LF" secondAttribute="centerX" id="Wzl-gp-JmN"/>
                             <constraint firstItem="SW2-a6-guC" firstAttribute="bottom" secondItem="QMN-9G-JHr" secondAttribute="bottom" id="a5Y-28-AID"/>
                             <constraint firstItem="tGh-Ka-6TX" firstAttribute="centerY" secondItem="SW2-a6-guC" secondAttribute="centerY" id="aql-GQ-GWM"/>
@@ -822,11 +831,13 @@
                             <constraint firstItem="tGh-Ka-6TX" firstAttribute="leading" secondItem="SW2-a6-guC" secondAttribute="trailing" constant="10" id="hQf-Ak-5uE"/>
                             <constraint firstItem="SW2-a6-guC" firstAttribute="leading" secondItem="Zqc-j2-Kon" secondAttribute="leading" constant="20" id="hlD-pb-5mE"/>
                             <constraint firstItem="Zqc-j2-Kon" firstAttribute="width" secondItem="tr6-sA-4hO" secondAttribute="width" multiplier="0.9" id="iZV-lB-pFK"/>
+                            <constraint firstItem="j5J-2J-PLP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="2YE-d2-Q4q" secondAttribute="trailing" constant="10" id="jRN-IB-aM7"/>
                             <constraint firstItem="2YE-d2-Q4q" firstAttribute="bottom" secondItem="SW2-a6-guC" secondAttribute="bottom" id="pbW-AK-E5n"/>
                             <constraint firstItem="pg2-Bq-FOE" firstAttribute="leading" secondItem="SW2-a6-guC" secondAttribute="leading" id="ptp-dE-Ron"/>
                             <constraint firstItem="QMN-9G-JHr" firstAttribute="trailing" secondItem="Zqc-j2-Kon" secondAttribute="trailing" id="t7z-5d-62u"/>
                             <constraint firstItem="2YE-d2-Q4q" firstAttribute="top" secondItem="SW2-a6-guC" secondAttribute="top" id="w1j-Ya-frc"/>
                             <constraint firstItem="2YE-d2-Q4q" firstAttribute="leading" secondItem="SW2-a6-guC" secondAttribute="leading" id="w85-ep-kGY"/>
+                            <constraint firstItem="j5J-2J-PLP" firstAttribute="height" secondItem="QMN-9G-JHr" secondAttribute="height" id="yij-mB-LDn"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fsH-6j-9LF"/>
                     </view>

@@ -8,6 +8,7 @@ import CoreData
 
 
 class LocalDatabase {
+    
     lazy var container: NSPersistentContainer = NSPersistentContainer(name: "CoreDataModel")
     private lazy var mainContext = self.container.viewContext
     
