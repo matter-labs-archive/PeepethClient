@@ -53,7 +53,7 @@
                     </view>
                     <connections>
                         <segue destination="mT2-X4-VUk" kind="presentation" identifier="AppSegue" id="Egn-ak-cZN"/>
-                        <segue destination="ATf-TR-ATL" kind="presentation" identifier="LoginSegue" id="jPk-8u-g4V"/>
+                        <segue destination="ATf-TR-ATL" kind="show" identifier="LoginSegue" animates="NO" id="jPk-8u-g4V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
