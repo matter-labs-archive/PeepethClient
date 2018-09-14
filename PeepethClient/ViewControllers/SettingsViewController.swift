@@ -154,7 +154,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
         }
         
         let closeAction = UIAlertAction(title: "Close", style: .cancel) { (alertAction) in
-            _ = alert.textFields![0] as UITextField
         }
         alert.addAction(copyAction)
         alert.addAction(closeAction)
