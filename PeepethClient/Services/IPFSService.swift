@@ -6,16 +6,16 @@
 import Foundation
 
 class IPFSService {
-    
+
     private lazy var connection: URLSession = {
         let configuration = URLSessionConfiguration.ephemeral
         let session = URLSession(configuration: configuration)
         return session
     }()
-    
+
     //TODO: - Put url here
     private let url = URL(string: "http://178.62.253.112/add_data")!
-    
+
     func postToIPFS<T: Encodable>(data: T, completion: @escaping(Result<String>) -> Void) {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -26,7 +26,7 @@ class IPFSService {
         } catch {
             completion(Result.Error(error))
         }
-        
+
         let dataTask = connection.dataTask(with: request) { (data1, response, error) in
             if error != nil {
                 completion(Result.Error(error!))
@@ -34,15 +34,19 @@ class IPFSService {
             }
             if let data1 = data1 {
                 do {
-                    guard let jsonData = try JSONSerialization.jsonObject(with: data1, options: []) as? [String: String] else { return }
-                    guard let hash = jsonData["Hash"] else { return }
+                    guard let jsonData = try JSONSerialization.jsonObject(with: data1, options: []) as? [String: String] else {
+                        return
+                    }
+                    guard let hash = jsonData["Hash"] else {
+                        return
+                    }
                     completion(Result.Success(hash))
                 } catch {
                     completion(Result.Error(error))
                 }
             }
         }
-        
+
         dataTask.resume()
     }
 }

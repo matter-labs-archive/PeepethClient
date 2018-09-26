@@ -10,11 +10,11 @@ import Foundation
 import web3swift
 
 class WalletController {
-    
+
     let localStorage = LocalDatabase()
     let keysService: KeysService = KeysService()
     let web3service: Web3swiftService = Web3swiftService()
-    
+
     func createWallet(with mode: WalletCreationMode,
                       password: String?,
                       key: String?,
@@ -58,7 +58,7 @@ class WalletController {
                         case .Error(let error):
                             completion(error)
                         }
-                        
+
                     })
                 }
             }

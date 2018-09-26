@@ -14,7 +14,7 @@ enum tabs: Int {
     case userPeeps = 0
 }
 
-func tabsToShow(globalPeeps: Bool, userPeeps: Bool, settings: Bool, for tabBarController: UITabBarController?){
+func tabsToShow(globalPeeps: Bool, userPeeps: Bool, settings: Bool, for tabBarController: UITabBarController?) {
     if globalPeeps == false {
         tabBarController?.viewControllers?.remove(at: tabs.globalPeeps.rawValue)
     }

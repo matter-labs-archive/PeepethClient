@@ -6,7 +6,7 @@
 import UIKit
 
 class PeepCell: UITableViewCell {
-    
+
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var nickNameLabel: UILabel!
@@ -14,23 +14,23 @@ class PeepCell: UITableViewCell {
     @IBOutlet weak var sharedLabel: UILabel!
     @IBOutlet weak var separatorView: UIView!
     @IBOutlet weak var attachedImage: UIImageView!
-    
+
     @IBOutlet weak var attachedHeight: NSLayoutConstraint!
     @IBOutlet weak var leftConstraint: NSLayoutConstraint!
-    
+
     var peep: ServerPeep! {
         didSet {
             peepSetConfigure()
         }
     }
-    
+
     func peepSetConfigure() {
         userAvatar.layer.cornerRadius = userAvatar.frame.size.width / 2
         userAvatar.clipsToBounds = true
         userNameLabel.text = peep.info["realName"] as? String
-        nickNameLabel.text = (peep.info["name"] != nil) ? "@"+(peep.info["name"] as? String)! : nil
+        nickNameLabel.text = (peep.info["name"] != nil) ? "@" + (peep.info["name"] as? String)! : nil
         messageLabel.text = peep.info["content"] as? String
-        
+
         print(messageLabel.text!)
         if let imageData = peep.info["avatar_imageData"] {
             let image = UIImage(data: imageData as! Data)
@@ -38,7 +38,7 @@ class PeepCell: UITableViewCell {
         } else {
             self.userAvatar.image = UIImage(named: "peepLogo")
         }
-        
+
         if peep.info["image_url"] != nil {
             let image = peep.info["attached_imageData"] != nil ? UIImage(data: peep.info["attached_imageData"] as! Data) : UIImage(named: "peepLogo")
             self.attachedImage.image = image
@@ -49,8 +49,8 @@ class PeepCell: UITableViewCell {
             self.attachedImage.isHidden = true
             self.attachedHeight?.constant = 0
         }
-        
-        
+
+
         // if peep has parent or it is shared
         sharedLabel.isHidden = peep.shared || peep.parent ? false : true
         leftConstraint.constant = peep.shared || peep.parent ? 25 : 5
@@ -65,24 +65,23 @@ class PeepCell: UITableViewCell {
         } else {
             self.separatorView.backgroundColor = UIColor.white
         }
-        
+
     }
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-    
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        
+
         // Configure the view for the selected state
     }
-    
-    override func prepareForReuse()
-    {
+
+    override func prepareForReuse() {
         super.prepareForReuse()
-        
+
         self.userNameLabel.text = ""
         self.nickNameLabel.text = ""
         self.messageLabel.text = ""
@@ -93,5 +92,5 @@ class PeepCell: UITableViewCell {
         self.attachedImage.image = nil
         //self.attachedHeight.constant = 0
     }
-    
+
 }

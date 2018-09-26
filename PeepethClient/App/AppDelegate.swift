@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 // It'll be easier with this
-func delay(_ delay:Double, closure:@escaping ()->()) {
+func delay(_ delay: Double, closure: @escaping () -> ()) {
     let when = DispatchTime.now() + delay
     DispatchQueue.main.asyncAfter(deadline: when, execute: closure)
 }
@@ -54,7 +54,7 @@ extension UIViewController {
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
-    
+
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
