@@ -87,7 +87,6 @@ class CreateWalletViewController: UIViewController,
         }
     }
 
-
     @IBAction func backAction(_ sender: UIButton) {
         dismiss(animated: true, completion: nil)
     }
@@ -152,7 +151,6 @@ class CreateWalletViewController: UIViewController,
         }
         dismiss(animated: true, completion: nil)
     }
-
 
     func readerDidCancel(_ reader: QRCodeReaderViewController) {
         reader.stopScanning()
@@ -238,7 +236,6 @@ extension CreateWalletViewController: UITextFieldDelegate {
         }
         return true
     }
-
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.returnKeyType == .done && createButton.isEnabled && ((passwordTextField.text?.count)! > 4) {

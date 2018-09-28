@@ -27,7 +27,6 @@ enum WalletSavingError: Error {
     case couldNotGetThePrivateKey
 }
 
-
 class KeysService: IKeysService {
 
     let localStorage = LocalDatabase()
@@ -109,8 +108,3 @@ extension IKeysService {
         return KeystoreManager([EthereumKeystoreV3(data)!])
     }
 }
-
-
-
-
-

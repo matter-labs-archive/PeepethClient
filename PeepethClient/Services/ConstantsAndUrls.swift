@@ -74,5 +74,3 @@ func parseAttachedImageServerString(peep: ServerPeep) -> URL? {
 //    let extString = parsedString[2]
     return URL(string: peepAttachedImageUrlString)
 }
-
-

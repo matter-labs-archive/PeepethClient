@@ -58,9 +58,9 @@ class PeepethAuthService {
         request.setValue("https://peepeth.com", forHTTPHeaderField: "Origin")
         request.setValue("XMLHttpRequest", forHTTPHeaderField: "X-Requested-With")
         let semaphore = DispatchSemaphore(value: 0)
-        var responseData: Data? = nil
-        var response: URLResponse? = nil
-        var task: URLSessionDataTask? = nil
+        var responseData: Data?
+        var response: URLResponse?
+        var task: URLSessionDataTask?
         DispatchQueue.global().async {
             task = self.session.dataTask(with: request) { (data, resp, error) in
                 if error != nil {
@@ -315,7 +315,7 @@ class PeepethAuthService {
     }
 
     func createPeep(data: CreateServerPeep, ipfs: String, completion: @escaping(Result<String?>) -> Void) {
-        var task: URLSessionDataTask? = nil
+        var task: URLSessionDataTask?
 
         let requestForPosting = requestForPostingToServer(data: data, ipfs: ipfs)
 
@@ -329,29 +329,26 @@ class PeepethAuthService {
         request.setValue(self.xRequestedWith ?? "", forHTTPHeaderField: "X-Requested-With")
         request.setValue(self.xCsrfToken ?? "", forHTTPHeaderField: "X-CSRF-Token")
 
-        DispatchQueue.global().async {
-            task = self.session.dataTask(with: request) { (data, resp, error) in
-                if error != nil {
-                    completion(Result.Error(error!))
-                    return
-                }
-                if let resp = resp, let data = data {
-                    do {
-                        let responseStatusCode = (resp as! HTTPURLResponse).statusCode
-                        let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                        if let hash = jsonData!["ipfs"] as? String {
-                            completion(Result.Success(hash))
-                        } else {
-                            completion(Result.Success(nil))
-                        }
-
-                    } catch {
-                        completion(Result.Error(error))
+        task = self.session.dataTask(with: request) { (data, resp, error) in
+            if error != nil {
+                completion(Result.Error(error!))
+                return
+            }
+            if let resp = resp, let data = data {
+                do {
+                    let responseStatusCode = (resp as! HTTPURLResponse).statusCode
+                    let jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                    if let hash = jsonData!["ipfs"] as? String {
+                        completion(Result.Success(hash))
+                    } else {
+                        completion(Result.Success(nil))
                     }
+
+                } catch {
+                    completion(Result.Error(error))
                 }
             }
-            task!.resume()
         }
+        task!.resume()
     }
 }
-

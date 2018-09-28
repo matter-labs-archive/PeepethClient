@@ -21,7 +21,6 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-
         self.createWalletButton.alpha = 0
         self.importWalletButton.alpha = 0
         self.logoTitle.alpha = 0
@@ -40,7 +39,6 @@ class LoginViewController: UIViewController {
         //Enter animation
         logoHeightStartConstraint.isActive = false
         logoHeightEndConstraint.isActive = true
-
 
         UIView.animate(withDuration: 1.5) {
             self.view.layoutIfNeeded()
@@ -100,6 +98,5 @@ class LoginViewController: UIViewController {
             createWalletController.mode = walletKeysMode
         }
     }
-
 
 }

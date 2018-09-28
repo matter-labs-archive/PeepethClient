@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 /*
  * Model of Peeps tweets we got from server
  */
@@ -84,7 +83,6 @@ extension ServerPeep: Equatable {
 
 }
 
-
 //peep[ipfs]: xxx
 //peep[author]: 0x832a630b949575b87c0e3c00f624f773d9b160f4
 //peep[content]: empty_peep
@@ -117,4 +115,3 @@ struct CreateServerPeep: Encodable {
         case shareNow = "share_now"
     }
 }
-

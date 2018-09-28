@@ -32,7 +32,7 @@ class Web3swiftService {
         return contract
     }
 
-    //MARK: - Account creation
+    // MARK: - Account creation
     func prepareCreateAccountTransaction(username: String, userDataHash: String, gasLimit: BigUInt = 27500, completion: @escaping (Result<TransactionIntermediate>) -> Void) {
         //preparing
 
@@ -80,7 +80,7 @@ class Web3swiftService {
         }
     }
 
-    //MARK: - Posting a peep
+    // MARK: - Posting a peep
     func preparePostPeepTransaction(peepDataHash: String, gasLimit: BigUInt = 27500, completion: @escaping (Result<TransactionIntermediate>) -> Void) {
         DispatchQueue.global().async {
             let wallet = Web3swiftService.keyservice.selectedWallet()
@@ -222,7 +222,6 @@ class Web3swiftService {
         }
     }
 
-
     //Sending Transaction
     func sendTransaction(transaction: TransactionIntermediate, password: String, completion: @escaping (Result<TransactionSendingResult>) -> Void) {
         DispatchQueue.global().async {
@@ -240,7 +239,6 @@ class Web3swiftService {
             }
         }
     }
-
 
     //Checking whether account already registered or not
     func isAccountRegistered(address: EthereumAddress, completion: @escaping (Result<Bool>) -> Void) {
@@ -269,7 +267,7 @@ class Web3swiftService {
 
     }
 
-    //MARK: - Get ETH balance
+    // MARK: - Get ETH balance
     func getETHbalance(completion: @escaping (BigUInt?, Error?) -> Void) {
         DispatchQueue.global().async {
             let wallet = Web3swiftService.keyservice.localStorage.getWallet()
@@ -313,7 +311,7 @@ class Web3swiftService {
         }
     }
 
-    //MARK: - Get untrusted address
+    // MARK: - Get untrusted address
     func getUntrustedAddress(completion: @escaping (String?) -> Void) {
         DispatchQueue.global().async {
             let wallet = Web3swiftService.keyservice.localStorage.getWallet()
@@ -325,7 +323,6 @@ class Web3swiftService {
             completion(address)
         }
     }
-
 
 }
 

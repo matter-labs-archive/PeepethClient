@@ -23,7 +23,7 @@ class PeepsService: NSObject {
     func getPeeps(url: URL, callback: @escaping ([ServerPeep]?, Error?) -> Void) {
         var peeps = [ServerPeep]()
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60000)
-        let dataTask = connection.dataTask(with: request) { data, response, error in
+        let dataTask = connection.dataTask(with: request) { data, _, error in
             if let data = data,
                let json = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [[String: Any]] {
                 for item in json {
@@ -105,15 +105,19 @@ class PeepsService: NSObject {
                         peeps.append(parentPeep)
                     }
                 }
-                callback(peeps, nil)
+                DispatchQueue.main.async {
+                    callback(peeps, nil)
+                }
             } else if let error = error {
-                callback(nil, error.localizedDescription as? Error)
+                DispatchQueue.main.async {
+                    callback(nil, error.localizedDescription as? Error)
+                }
             }
         }
         dataTask.resume()
     }
 
-    func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+    func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             completion(data, response, error)
         }.resume()
@@ -122,6 +126,5 @@ class PeepsService: NSObject {
 }
 
 extension PeepsService: URLSessionDelegate, URLSessionTaskDelegate {
-
 
 }
