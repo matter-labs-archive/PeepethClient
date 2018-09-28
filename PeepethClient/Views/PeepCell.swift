@@ -14,6 +14,7 @@ class PeepCell: UITableViewCell {
     @IBOutlet weak var sharedLabel: UILabel!
     @IBOutlet weak var separatorView: UIView!
     @IBOutlet weak var attachedImage: UIImageView!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
 
     @IBOutlet weak var attachedHeight: NSLayoutConstraint!
     @IBOutlet weak var leftConstraint: NSLayoutConstraint!
@@ -30,8 +31,8 @@ class PeepCell: UITableViewCell {
         userNameLabel.text = peep.info["realName"] as? String
         nickNameLabel.text = (peep.info["name"] != nil) ? "@" + (peep.info["name"] as? String)! : nil
         messageLabel.text = peep.info["content"] as? String
+        spinner.isHidden = true
 
-        print(messageLabel.text!)
         if let imageData = peep.info["avatar_imageData"] {
             let image = UIImage(data: imageData as! Data)
             self.userAvatar.image = image
@@ -50,7 +51,6 @@ class PeepCell: UITableViewCell {
             self.attachedHeight?.constant = 0
         }
 
-
         // if peep has parent or it is shared
         sharedLabel.isHidden = peep.shared || peep.parent ? false : true
         leftConstraint.constant = peep.shared || peep.parent ? 25 : 5
@@ -68,20 +68,8 @@ class PeepCell: UITableViewCell {
 
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
-
         self.userNameLabel.text = ""
         self.nickNameLabel.text = ""
         self.messageLabel.text = ""
@@ -90,7 +78,6 @@ class PeepCell: UITableViewCell {
         self.separatorView.backgroundColor = UIColor.white
         self.leftConstraint.constant = 5
         self.attachedImage.image = nil
-        //self.attachedHeight.constant = 0
     }
 
 }

@@ -10,7 +10,6 @@ import UIKit
 import BigInt
 import web3swift
 
-
 class SettingsViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var balanceLabel: UILabel!
@@ -26,7 +25,6 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     let keysService = KeysService()
     let service = Web3swiftService()
     let ipfsService = IPFSService()
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,7 +45,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
 
         getUntrustedAddress()
 
-        service.getETHbalance() { (result, error) in
+        service.getETHbalance { (result, _) in
             DispatchQueue.main.async {
                 let ethUnits = Web3Utils.formatToEthereumUnits(result!, toUnits: .eth, decimals: 6, decimalSeparator: ".")
                 self.balanceLabel.text = "ETH Balance: " + ethUnits!
@@ -91,7 +89,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
 
         getUntrustedAddress()
 
-        service.getETHbalance() { (result, error) in
+        service.getETHbalance { (result, _) in
             DispatchQueue.main.async {
                 let ethUnits = Web3Utils.formatToEthereumUnits(result!, toUnits: .eth, decimals: 6, decimalSeparator: ".")
                 self.balanceLabel.text = "ETH Balance: " + ethUnits!
@@ -126,7 +124,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             textField.placeholder = "Enter your password"
         }
 
-        let enterPasswordAction = UIAlertAction(title: "Enter", style: .default) { (alertAction) in
+        let enterPasswordAction = UIAlertAction(title: "Enter", style: .default) { (_) in
             let passwordTextField = alert.textFields![0] as UITextField
             if let privateKey = self.keysService.getWalletPrivateKey(password: passwordTextField.text!) {
                 self.privateKeyAlert(privateKey: privateKey)
@@ -135,7 +133,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                 self.showErrorAlert(error: "Wrong password")
             }
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (cancel) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
 
         }
 
@@ -148,12 +146,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     func privateKeyAlert(privateKey: String) {
         let alert = UIAlertController(title: "Private key", message: privateKey, preferredStyle: UIAlertControllerStyle.alert)
 
-        let copyAction = UIAlertAction(title: "Copy", style: .default) { (alertAction) in
+        let copyAction = UIAlertAction(title: "Copy", style: .default) { (_) in
             let pasteboard = UIPasteboard.general
             pasteboard.string = privateKey
         }
 
-        let closeAction = UIAlertAction(title: "Close", style: .cancel) { (alertAction) in
+        let closeAction = UIAlertAction(title: "Close", style: .cancel) { (_) in
         }
         alert.addAction(copyAction)
         alert.addAction(closeAction)
@@ -194,13 +192,12 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             textField.placeholder = "Enter your password"
         }
 
-        let enterPasswordAction = UIAlertAction(title: "Enter", style: .default) { (alertAction) in
+        let enterPasswordAction = UIAlertAction(title: "Enter", style: .default) { (_) in
             self.animation.waitAnimation(isEnabled: true, notificationText: "Preparing transaction", selfView: self.view)
 
             let nickNameTextField = alert.textFields![0] as UITextField
             let realNameTextField = alert.textFields![1] as UITextField
             let passwordTextField = alert.textFields![2] as UITextField
-
 
             if (nickNameTextField.text?.count)! < 3 {
                 self.showErrorAlert(error: "Use more symbols in nickname")
@@ -229,7 +226,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                 self.showErrorAlert(error: "Wrong password")
             }
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (cancel) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
 
         }
 
@@ -334,11 +331,11 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
             textField.isUserInteractionEnabled = false
         }
 
-        let confirmTransaction = UIAlertAction(title: "OK", style: .default) { (alertAction) in
+        let confirmTransaction = UIAlertAction(title: "OK", style: .default) { (_) in
             self.animation.waitAnimation(isEnabled: true, notificationText: "Sending transaction", selfView: self.view)
             self.sendTransaction(password: password, transaction: transaction)
         }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (cancel) in
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
 
         }
 
@@ -352,7 +349,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
 
         self.service.sendTransaction(transaction: transaction, password: password, completion: { (result) in
             switch result {
-            case .Success(_):
+            case .Success:
                 self.showAlertSuccessTransaction()
             case .Error(let error):
                 self.showErrorAlert(error: error.localizedDescription)
@@ -364,7 +361,7 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
     func showAlertSuccessTransaction() {
         animation.waitAnimation(isEnabled: false, notificationText: nil, selfView: self.view)
         let alert = UIAlertController(title: "Success transaction", message: "Thank you, now just wait while your transaction is providing in the blockchain. It may take some time :) Track your transaction on Etherscan. Restart PeepEth to correctly sign in after it will be provided", preferredStyle: UIAlertControllerStyle.alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { (action) in
+        let okAction = UIAlertAction(title: "OK", style: .default) { (_) in
         }
         alert.addAction(okAction)
 
@@ -390,6 +387,5 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
 
         return false
     }
-
 
 }

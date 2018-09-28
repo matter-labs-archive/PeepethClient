@@ -28,11 +28,9 @@ class EnterViewController: UIViewController {
         self.performSegue(withIdentifier: "LoginSegue", sender: self)
     }
 
-
     func goToApp() {
         self.performSegue(withIdentifier: "AppSegue", sender: self)
     }
-
 
 }
 
@@ -53,7 +51,4 @@ extension EnterViewController {
 
     }
 
-
 }
-
-

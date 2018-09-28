@@ -6,14 +6,13 @@
 import Foundation
 import CoreData
 
-
 class LocalDatabase {
 
     lazy var container: NSPersistentContainer = NSPersistentContainer(name: "CoreDataModel")
     private lazy var mainContext = self.container.viewContext
 
     init() {
-        container.loadPersistentStores { (storeDescription, error) in
+        container.loadPersistentStores { (_, error) in
             if let error = error {
                 fatalError("Failed to load store: \(error)")
             }
@@ -35,7 +34,6 @@ class LocalDatabase {
             print(error)
             return nil
         }
-
 
     }
 
