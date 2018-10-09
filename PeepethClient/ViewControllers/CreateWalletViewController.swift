@@ -181,8 +181,7 @@ extension CreateWalletViewController: UITextFieldDelegate {
             }
         case passwordTextField:
             if !futureString.isEmpty &&
-                futureString == repeatPasswordTextField.text ||
-                repeatPasswordTextField.text?.isEmpty == true {
+                futureString == repeatPasswordTextField.text {
                 passwordsDontMatch.isHidden = true
                 createButton.isEnabled = (!(enterPrivateKeyTextField.text?.isEmpty ?? true) || mode == .createKey)
             } else {
