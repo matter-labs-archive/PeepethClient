@@ -22,9 +22,9 @@ enum peepsFor: String {
 }
 
 func urlForGetPeeps(type: peepsFor, walletAddress: String?, lastPeep: ServerPeep? = nil) -> URL? {
-    
+
     let url: String?
-    
+
     if type == .user {
         let basicUrl: String = type.rawValue
         let olderUrl: String = (lastPeep != nil) ? (lastPeep?.info["ipfs"] as! String) : "0"
@@ -34,32 +34,38 @@ func urlForGetPeeps(type: peepsFor, walletAddress: String?, lastPeep: ServerPeep
         let olderUrl: String = (lastPeep != nil) ? "&oldest=" + (lastPeep?.info["ipfs"] as! String) : "&oldest=0"
         url = basicUrl + olderUrl
     }
-    
+
     return URL(string: url!)
 }
 
 func urlForSearchPeeps(searchingString: String, page: Int = 1) -> URL? {
-    let basicUrl: String = "https://peepeth.com/search_peeps?search="+searchingString
+    let basicUrl: String = "https://peepeth.com/search_peeps?search=" + searchingString
     let olderUrl: String = "&page=\(page)"
     let url = basicUrl + olderUrl
     return URL(string: url)
 }
 
 func parseImageServerString(peep: ServerPeep) -> URL? {
-    
-    guard let peepAvatarUrlString = peep.info["avatarUrl"] as? String else { return nil }
-    
+
+    guard let peepAvatarUrlString = peep.info["avatarUrl"] as? String else {
+        return nil
+    }
+
     let parsedString = (peepAvatarUrlString).components(separatedBy: ":")
-    guard parsedString.count > 2 else { return nil }
-    let serverString =  parsedString[0]
+    guard parsedString.count > 2 else {
+        return nil
+    }
+    let serverString = parsedString[0]
     let nameString = parsedString[1]
     let extString = parsedString[2]
     return URL(string: "https://\(serverString).s3-us-west-1.amazonaws.com/images/avatars/\(nameString)/small.\(extString)")
 }
 
 func parseAttachedImageServerString(peep: ServerPeep) -> URL? {
-    
-    guard let peepAttachedImageUrlString = peep.info["image_url"] as? String else { return nil }
+
+    guard let peepAttachedImageUrlString = peep.info["image_url"] as? String else {
+        return nil
+    }
 //    
 //    let parsedString = (peepAvatarUrlString).components(separatedBy: ":")
 //    guard parsedString.count > 2 else { return nil }
@@ -68,5 +74,3 @@ func parseAttachedImageServerString(peep: ServerPeep) -> URL? {
 //    let extString = parsedString[2]
     return URL(string: peepAttachedImageUrlString)
 }
-
-

@@ -21,6 +21,8 @@
 		919178232146E2AA00DF2F72 /* WalletCreationMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919178222146E2AA00DF2F72 /* WalletCreationMode.swift */; };
 		919178252146E48600DF2F72 /* TabsToShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919178242146E48600DF2F72 /* TabsToShow.swift */; };
 		919178272146E8A800DF2F72 /* Requests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 919178262146E8A800DF2F72 /* Requests.swift */; };
+		B2495DFA215B89DB005B18F2 /* PeepethClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2495DF9215B89DB005B18F2 /* PeepethClientUITests.swift */; };
+		B2495E02215B89EC005B18F2 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2495E01215B89EC005B18F2 /* SnapshotHelper.swift */; };
 		E23FF8F520EF519B007BB50D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23FF8F420EF519B007BB50D /* AppDelegate.swift */; };
 		E23FF8F720EF519B007BB50D /* EnterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E23FF8F620EF519B007BB50D /* EnterViewController.swift */; };
 		E23FF8FA20EF519B007BB50D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E23FF8F820EF519B007BB50D /* Main.storyboard */; };
@@ -36,6 +38,16 @@
 		E29F68E920F05240003E5442 /* SendPeepViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E29F68E820F05240003E5442 /* SendPeepViewController.swift */; };
 		E2F98B8C20F19821003B02F4 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2F98B8B20F19821003B02F4 /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B2495DFC215B89DB005B18F2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E23FF8E920EF519B007BB50D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E23FF8F020EF519B007BB50D;
+			remoteInfo = PeepethClient;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		00E5FE8620EF54B60030E0D6 /* IPFSService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPFSService.swift; sourceTree = "<group>"; };
@@ -54,6 +66,10 @@
 		919178222146E2AA00DF2F72 /* WalletCreationMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCreationMode.swift; sourceTree = "<group>"; };
 		919178242146E48600DF2F72 /* TabsToShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabsToShow.swift; sourceTree = "<group>"; };
 		919178262146E8A800DF2F72 /* Requests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Requests.swift; sourceTree = "<group>"; };
+		B2495DF7215B89DB005B18F2 /* PeepethClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PeepethClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2495DF9215B89DB005B18F2 /* PeepethClientUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeepethClientUITests.swift; sourceTree = "<group>"; };
+		B2495DFB215B89DB005B18F2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2495E01215B89EC005B18F2 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SnapshotHelper.swift; path = fastlane/SnapshotHelper.swift; sourceTree = SOURCE_ROOT; };
 		E23FF8F120EF519B007BB50D /* PeepethClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PeepethClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E23FF8F420EF519B007BB50D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E23FF8F620EF519B007BB50D /* EnterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +89,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B2495DF4215B89DB005B18F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E23FF8EE20EF519B007BB50D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -129,6 +152,16 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		B2495DF8215B89DB005B18F2 /* PeepethClientUITests */ = {
+			isa = PBXGroup;
+			children = (
+				B2495DF9215B89DB005B18F2 /* PeepethClientUITests.swift */,
+				B2495E01215B89EC005B18F2 /* SnapshotHelper.swift */,
+				B2495DFB215B89DB005B18F2 /* Info.plist */,
+			);
+			path = PeepethClientUITests;
+			sourceTree = "<group>";
+		};
 		D54176D337DABB1B865FB36A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				E23FF8F320EF519B007BB50D /* PeepethClient */,
+				B2495DF8215B89DB005B18F2 /* PeepethClientUITests */,
 				E23FF8F220EF519B007BB50D /* Products */,
 				D548BA226B69C8ADF5E0E0E2 /* Pods */,
 				D54176D337DABB1B865FB36A /* Frameworks */,
@@ -160,6 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				E23FF8F120EF519B007BB50D /* PeepethClient.app */,
+				B2495DF7215B89DB005B18F2 /* PeepethClientUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -205,6 +240,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B2495DF6215B89DB005B18F2 /* PeepethClientUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B2495E00215B89DB005B18F2 /* Build configuration list for PBXNativeTarget "PeepethClientUITests" */;
+			buildPhases = (
+				B2495DF3215B89DB005B18F2 /* Sources */,
+				B2495DF4215B89DB005B18F2 /* Frameworks */,
+				B2495DF5215B89DB005B18F2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B2495DFD215B89DB005B18F2 /* PBXTargetDependency */,
+			);
+			name = PeepethClientUITests;
+			productName = PeepethClientUITests;
+			productReference = B2495DF7215B89DB005B18F2 /* PeepethClientUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		E23FF8F020EF519B007BB50D /* PeepethClient */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E23FF90320EF519E007BB50D /* Build configuration list for PBXNativeTarget "PeepethClient" */;
@@ -229,10 +282,16 @@
 		E23FF8E920EF519B007BB50D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1000;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = BaldyAsh;
 				TargetAttributes = {
+					B2495DF6215B89DB005B18F2 = {
+						CreatedOnToolsVersion = 10.0;
+						DevelopmentTeam = 5UH69GW6GE;
+						ProvisioningStyle = Manual;
+						TestTargetID = E23FF8F020EF519B007BB50D;
+					};
 					E23FF8F020EF519B007BB50D = {
 						CreatedOnToolsVersion = 9.4.1;
 					};
@@ -252,11 +311,19 @@
 			projectRoot = "";
 			targets = (
 				E23FF8F020EF519B007BB50D /* PeepethClient */,
+				B2495DF6215B89DB005B18F2 /* PeepethClientUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B2495DF5215B89DB005B18F2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E23FF8EF20EF519B007BB50D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -291,6 +358,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B2495DF3215B89DB005B18F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2495DFA215B89DB005B18F2 /* PeepethClientUITests.swift in Sources */,
+				B2495E02215B89EC005B18F2 /* SnapshotHelper.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E23FF8ED20EF519B007BB50D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -324,6 +400,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		B2495DFD215B89DB005B18F2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E23FF8F020EF519B007BB50D /* PeepethClient */;
+			targetProxy = B2495DFC215B89DB005B18F2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		E23FF8F820EF519B007BB50D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -344,6 +428,49 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B2495DFE215B89DB005B18F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 5UH69GW6GE;
+				INFOPLIST_FILE = PeepethClientUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.matter.PeepethClientUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PeepethClient;
+			};
+			name = Debug;
+		};
+		B2495DFF215B89DB005B18F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 5UH69GW6GE;
+				INFOPLIST_FILE = PeepethClientUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = io.matter.PeepethClientUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PeepethClient;
+			};
+			name = Release;
+		};
 		E23FF90120EF519E007BB50D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -463,20 +590,22 @@
 			baseConfigurationReference = 13A08ED09EDC30AA3F6D8AAF /* Pods-PeepethClient.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8DB897QKJA;
-				INFOPLIST_FILE = "$(SRCROOT)/PeepethClient/App/Info.plist";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = 5UH69GW6GE;
+				INFOPLIST_FILE = ./PeepethClient/App/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.baldyAsh.baldyAsh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.peepethClient.PeepethClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = peepethProfile;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -485,26 +614,37 @@
 			baseConfigurationReference = 3FA0568E29E9730C72F349BD /* Pods-PeepethClient.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8DB897QKJA;
-				INFOPLIST_FILE = "$(SRCROOT)/PeepethClient/App/Info.plist";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 10;
+				DEVELOPMENT_TEAM = 5UH69GW6GE;
+				INFOPLIST_FILE = ./PeepethClient/App/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.baldyAsh.baldyAsh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.peepethClient.PeepethClient;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE_SPECIFIER = peepethProfile;
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B2495E00215B89DB005B18F2 /* Build configuration list for PBXNativeTarget "PeepethClientUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2495DFE215B89DB005B18F2 /* Debug */,
+				B2495DFF215B89DB005B18F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E23FF8EC20EF519B007BB50D /* Build configuration list for PBXProject "PeepethClient" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

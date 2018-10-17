@@ -15,7 +15,7 @@ class Alerts {
         alert.addAction(cancelAction)
         controller.present(alert, animated: true, completion: nil)
     }
-    
+
     func show(_ title: String?, with message: String?, for controller: UIViewController) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)

@@ -13,19 +13,19 @@ import Foundation
  */
 
 class PeepsService: NSObject {
-    
+
     lazy var connection: URLSession = {
         let configuration = URLSessionConfiguration.ephemeral
         let session = URLSession(configuration: configuration, delegate: self as URLSessionDelegate, delegateQueue: nil)
         return session
     }()
-    
-    func getPeeps(url: URL, callback: @escaping ([ServerPeep]?,Error?) -> Void) {
+
+    func getPeeps(url: URL, callback: @escaping ([ServerPeep]?, Error?) -> Void) {
         var peeps = [ServerPeep]()
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 60000)
-        let dataTask = connection.dataTask(with: request) { data, response, error in
+        let dataTask = connection.dataTask(with: request) { data, _, error in
             if let data = data,
-                let json = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [[String: Any]] {
+               let json = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [[String: Any]] {
                 for item in json {
                     var itemDictionary = [String: Any?]()
                     if let tx = item["ipfs"] as? String {
@@ -49,7 +49,7 @@ class PeepsService: NSObject {
                     //if peep is shared
                     var shareDictionary = [String: Any?]()
                     if let share = item["share"] as? [String: Any?] {
-                        
+
                         if let tx = share["ipfs"] as? String {
                             shareDictionary["ipfs"] = tx
                         }
@@ -68,12 +68,12 @@ class PeepsService: NSObject {
                         if let image_url = share["image_url"] as? String {
                             shareDictionary["image_url"] = image_url
                         }
-                        
+
                     }
                     //if peep has parent
                     var parentDictionary = [String: Any?]()
                     if let parent = item["parent"] as? [String: Any?] {
-                        
+
                         if let tx = parent["ipfs"] as? String {
                             parentDictionary["ipfs"] = tx
                         }
@@ -92,7 +92,7 @@ class PeepsService: NSObject {
                         if let image_url = parent["image_url"] as? String {
                             parentDictionary["image_url"] = image_url
                         }
-                        
+
                     }
                     let peep = ServerPeep(info: itemDictionary, shared: false, parent: false)
                     peeps.append(peep)
@@ -105,23 +105,26 @@ class PeepsService: NSObject {
                         peeps.append(parentPeep)
                     }
                 }
-                callback(peeps,nil)
+                DispatchQueue.main.async {
+                    callback(peeps, nil)
+                }
             } else if let error = error {
-                callback(nil,error.localizedDescription as? Error)
+                DispatchQueue.main.async {
+                    callback(nil, error.localizedDescription as? Error)
+                }
             }
         }
         dataTask.resume()
     }
-    
-    func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+
+    func getDataFromUrl(url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> Void) {
         URLSession.shared.dataTask(with: url) { data, response, error in
             completion(data, response, error)
-            }.resume()
+        }.resume()
     }
-    
+
 }
 
 extension PeepsService: URLSessionDelegate, URLSessionTaskDelegate {
-    
-    
+
 }
