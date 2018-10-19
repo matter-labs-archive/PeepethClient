@@ -1,4 +1,5 @@
 PODS:
+  - Alamofire (4.7.3)
   - BigInt (3.1.0):
     - SipHash (~> 1.2)
   - CryptoSwift (0.10.0)
@@ -26,12 +27,14 @@ PODS:
     - secp256k1_ios (~> 0.1.3)
 
 DEPENDENCIES:
+  - Alamofire (~> 4.7)
   - QRCodeReader.swift (~> 8.2.0)
   - SwiftSoup
   - web3swift (~> 1.1.1)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - Alamofire
     - BigInt
     - CryptoSwift
     - libsodium
@@ -44,6 +47,7 @@ SPEC REPOS:
     - web3swift
 
 SPEC CHECKSUMS:
+  Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   BigInt: 76b5dfdfa3e2e478d4ffdf161aeede5502e2742f
   CryptoSwift: 6c778d69282bed3b4e975ff97a79d074f20bb011
   libsodium: 9a8faa5ef2fa0d2d57bd7f7d79bf8fb7c1a9f0ea
@@ -55,6 +59,6 @@ SPEC CHECKSUMS:
   SwiftSoup: e5f61d37e3d802a4b5db81b4945de3da9bfdf115
   web3swift: 4b4e4a0dd16e7081b7190bf8596c5638f313a498
 
-PODFILE CHECKSUM: b3bc48013d679f274bef6538a68407ed2e18924f
+PODFILE CHECKSUM: 1fadaf13f1b3626abbafb21435827e5573c6a79d
 
 COCOAPODS: 1.5.3
