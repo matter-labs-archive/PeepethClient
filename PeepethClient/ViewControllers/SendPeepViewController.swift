@@ -188,7 +188,7 @@ class SendPeepViewController: UIViewController {
                         picIpfs: "",
                         origContents: peep,
                         shareNow: true)
-                self.postToIPFS(peep: createdServerPeep, password: password)
+                self.postPeepToServer(peep: createdServerPeep, ipfsHash: "xxx", withPassword: password)
             } else {
                 self.showErrorAlert(error: "Can't create transaction")
             }
@@ -233,18 +233,6 @@ class SendPeepViewController: UIViewController {
             })
         }
 
-    }
-
-    func postToIPFS(peep: CreateServerPeep, password: String) {
-        DispatchQueue.main.async {
-            self.animation.waitAnimation(isEnabled: false,
-                                         notificationText: nil,
-                                         selfView: self.view)
-            self.animation.waitAnimation(isEnabled: true,
-                                         notificationText: "Transaction to IPFS",
-                                         selfView: self.view)
-        }
-        self.postPeepToServer(peep: peep, ipfsHash: "xxx", withPassword: password)
     }
 
     func confirmTransactionAlert(password: String, transaction: (TransactionIntermediate)) {
