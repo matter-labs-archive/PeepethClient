@@ -9,4 +9,5 @@ target 'PeepethClient' do
    pod 'web3swift', '~> 1.1.1'
    pod 'QRCodeReader.swift', '~> 8.2.0'
    pod 'SwiftSoup'
+   pod 'Alamofire', '~> 4.7'
 end
